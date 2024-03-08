@@ -1,0 +1,1 @@
+.\PreliminaryJudge.exe -m maps\map-3.7.txt .\main.exe -l ERR -s 123405
