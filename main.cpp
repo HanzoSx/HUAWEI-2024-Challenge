@@ -16,6 +16,31 @@ const int c_time_goodslife = 1000;
 const int N = c_size + 10;
 char map_ch[N][N];
 
+class Command
+{
+public:
+
+    static void print()
+    {
+        for (auto it : RobotCmd) printf("%s\n", it);
+    }
+
+    static void clear()
+    {
+        RobotCmd.clear();
+    }
+
+    static void move(size_t id, int direcet)
+    {
+        RobotCmd.emplace_back(to_string(id) + " " + to_string(direcet));
+    }
+
+private:
+
+    static vector<string> RobotCmd;
+
+};
+
 struct Robot
 {
     Robot() {}
@@ -48,6 +73,7 @@ struct Boat
 
     static int boat_capacity;
 };
+int Boat::boat_capacity = 0;
 
 struct Goods
 {
