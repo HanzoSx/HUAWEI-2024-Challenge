@@ -3,7 +3,7 @@
         {
             "type": "cppbuild",
             "label": "mingw-g++",
-            "command": "E:\\lib\\mingw64\\bin\\g++.exe",
+            "command": "E:\\lib\\mingw32\\bin\\g++.exe",
             "args": [
 				"-fdiagnostics-color=always",
                 "-g",

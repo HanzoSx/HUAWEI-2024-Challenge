@@ -22,24 +22,33 @@ public:
 
     static void print()
     {
-        for (auto it : RobotCmd) printf("%s\n", it);
+        for (auto& it : RobotCmd) printf("%s\n", it.c_str());
+        for (auto& it : BoatCmd) printf("%s\n", it.c_str());
+        
+        printf("OK\n");
+        fflush(stdout);
     }
 
     static void clear()
     {
         RobotCmd.clear();
+        BoatCmd.clear();
     }
 
-    static void move(size_t id, int direcet)
-    {
-        RobotCmd.emplace_back(to_string(id) + " " + to_string(direcet));
-    }
+    static void move(size_t id, int direcet)  { RobotCmd.emplace_back("move " + to_string(id) + " " + to_string(direcet)); }
+    static void get(size_t id)                { RobotCmd.emplace_back("get " + to_string(id)); }
+    static void pull(size_t id)               { RobotCmd.emplace_back("pull " + to_string(id)); }
+
+    static void ship(size_t id, int berth_id) { BoatCmd.emplace_back("ship " + to_string(id) + " " + to_string(berth_id)); }
+    static void go(size_t id)                 { BoatCmd.emplace_back("go " + to_string(id)); }
 
 private:
 
-    static vector<string> RobotCmd;
+    static vector<string> RobotCmd, BoatCmd;
 
 };
+vector<string> Command::RobotCmd, Command::BoatCmd;
+
 
 struct Robot
 {
@@ -138,7 +147,14 @@ size_t Input()
     // load boat info
     for (size_t i = 0; i < c_boat_num; ++ i)
     {
-        scanf("%d%d", &boat[i].status, &boat[i].pos);
+        int status, pos;
+        scanf("%d%d\n", &status, &pos);
+        if (boat[i].status != status or boat[i].pos != pos)
+        {
+            boat[i].status = static_cast<Boat::Status>(status);
+            boat[i].pos = pos;
+            cerr << id << " " << boat[i].status << " " << boat[i].pos << "\n";
+        }
     }
 
     // finish message
@@ -146,24 +162,69 @@ size_t Input()
     return id;
 }
 
+void solve(int tick)
+{
+    // cerr << "sovle " << tick << "\n";
+    Command::clear();
+
+    if (tick == 10)
+    {
+        for (size_t i = 0; i < c_boat_num; ++ i)
+            Command::ship(i, i + 5);
+        cerr << "go +5 " << tick << "\n";
+    }
+    else if (tick == 2000)
+    {
+        for (size_t i = 0; i < c_boat_num; ++ i)
+            Command::ship(i, i);
+        cerr << "go +0 " << tick << "\n";
+    }
+
+    Command::print();
+}
+
 int main()
 {
 
-    ofstream file("log.txt");
-    streambuf *err = cerr.rdbuf(file.rdbuf());
+    // ofstream file("log.txt");
+    // streambuf *err = cerr.rdbuf(file.rdbuf());
+
+    // solve(0);
 
     Init();
     
     for (size_t tick = 1; tick <= 15000; tick ++)
     {
-        size_t id = Input();
+        Input();
 
-        // for (size_t i = 0; i < robot_num; ++ i)
+        // for (size_t i = 0; i < c_robot_num; ++ i)
         //     printf("move %d %d\n", i, rand() % 4);
 
-        puts("OK");
-        fflush(stdout);
+        solve(tick);
     }
 
     return 0;
 }
+/*
+114 199346
+2
+1 5 20
+5 7 30
+0 1 2 1
+1 100 150 1
+1 95 174 1
+0 14 156 1
+0 154 47 0
+1 17 41 0
+1 99 152 1
+1 92 175 1
+0 13 152 1
+0 152 41 0
+1 16 73 0
+1 2
+1 1
+0 6
+1 -1
+0 8
+
+*/
