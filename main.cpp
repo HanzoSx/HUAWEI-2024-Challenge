@@ -110,7 +110,8 @@ struct Robot
 
     void setGet(int x, int y)
     {
-
+        work = Work::Get;
+        
     }
 
     void step();
@@ -150,8 +151,8 @@ void Robot::step()
             if (tmpDir > -1)
             {
                 Command::move(id, tmpDir);
-                x += c_dir[id][0];
-                y += c_dir[id][1];
+                x += c_dir[tmpDir][0];
+                y += c_dir[tmpDir][1];
             }
             break;
         }
@@ -228,20 +229,20 @@ void Init()
             auto [x, y] = que.front(); que.pop();
             for (int j = 0; j < 4; ++ j)
             {
-                int dx = c_dir[j][0], dy = c_dir[j][1];
-                if (map_ch[x + dx][y + dy] == '*' or map_ch[x + dx][y + dy] == '#')
+                int dx = x + c_dir[j][0], dy = y + c_dir[j][1];
+                if (map_ch[dx][dy] == '*' or map_ch[dx][dy] == '#')
                     continue;
-                if (berth[i].dis[x + dx][y + dy] > berth[i].dis[x][y] + 1)
+                if (berth[i].dis[dx][dy] > berth[i].dis[x][y] + 1)
                 {
-                    berth[i].dis[x + dx][y + dy] = berth[i].dis[x][y] + 1;
-                    que.push(make_pair<int, int>(x + dx, y + dy));
+                    berth[i].dis[dx][dy] = berth[i].dis[x][y] + 1;
+                    que.push(make_pair<int, int>(0 + dx, 0 + dy));
                 }
             }
         }
 
-        for (size_t x = 0; x < c_size; ++ x)
-        for (size_t y = 0; y < c_size; ++ y)
-            cerr << ((berth[i].dis[x][y] == INT_MAX) ? -1 : berth[i].dis[x][y]) << ((y == c_size - 1) ? '\n' : '\t');
+        // for (size_t x = 0; x < c_size; ++ x)
+        // for (size_t y = 0; y < c_size; ++ y)
+        //     cerr << ((berth[i].dis[x][y] == INT_MAX) ? -1 : berth[i].dis[x][y]) << ((y == c_size - 1) ? '\n' : '\t');
         
     }
     //////////////////////////////////////////////////
@@ -288,7 +289,7 @@ size_t Input()
         {
             boat[i].status = static_cast<Boat::Status>(status);
             boat[i].pos = pos;
-            cerr << id << " " << boat[i].status << " " << boat[i].pos << "\n";
+            // cerr << id << " " << boat[i].status << " " << boat[i].pos << "\n";
         }
     }
 
