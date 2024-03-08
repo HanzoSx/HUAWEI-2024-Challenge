@@ -1,9 +1,12 @@
 #include <vector>
+#include <queue>
 
 #include <iostream>
 #include <fstream>
 
 using namespace std;
+
+const int c_dir[4][2] = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
 
 const int c_size = 200;
 const int c_robot_num = 10;
@@ -49,24 +52,114 @@ private:
 };
 vector<string> Command::RobotCmd, Command::BoatCmd;
 
+struct Berth
+{
+    Berth()
+    {
+        for (int x = 0; x < c_size; ++ x)
+        for (int y = 0; y < c_size; ++ y)
+            dis[x][y] = INT_MAX;
+    }
+
+    int x, y;
+    int transport_time;
+    int loading_speed;
+
+    int dis[N][N];
+};
+Berth berth[c_berth_num + 10];
 
 struct Robot
 {
     Robot() {}
     Robot(int startX, int startY) : x(startX), y(startY) {}
 
-    int status;
+    int id, status;
     int x, y, goods;
-};
 
-struct Berth
+    enum Work
+    {
+        Get = 0,
+        Pull
+    };
+    Work work;
+
+    struct GetInfo
+    {
+        int x, y;
+        // vector<pair<int, int> > path;
+    };
+
+    struct PullInfo
+    {
+        int berth_id, distence;
+    };
+
+    union
+    {
+        GetInfo get;
+        PullInfo pull;
+    };
+
+    void setPull(int berth_id, int distence)
+    {
+        work = Work::Pull;
+        pull.berth_id = berth_id;
+        pull.distence = distence;
+    }
+
+    void setGet(int x, int y)
+    {
+
+    }
+
+    void step();
+
+};
+Robot robot[c_robot_num + 10];
+
+void Robot::step()
 {
-    Berth() {}
+    switch (work)
+    {
+        case Work::Pull:
+        {
+            int tmpDir = -1, tmpDis = INT_MAX;
+            for (int i = 0; i < 4; ++ i)
+            {
+                int dx = x + c_dir[i][0], dy = y + c_dir[i][1];
 
-    int x, y;
-    int transport_time;
-    int loading_speed;
-};
+                bool f = true;
+                for (size_t index = 0; index < c_robot_num; ++ index)
+                    if (robot[index].x == dx and robot[index].y == dy)
+                    {
+                        f = false;
+                        break;
+                    }
+
+                if (map_ch[dx][dy] == '*' or map_ch[dx][dy] == '#')
+                    f = false;
+                
+                if (f and berth[pull.berth_id].dis[dx][dy] < tmpDis)
+                {
+                    tmpDir = i;
+                    tmpDis = berth[pull.berth_id].dis[dx][dy];
+                }
+            }
+
+            if (tmpDir > -1)
+            {
+                Command::move(id, tmpDir);
+                x += c_dir[id][0];
+                y += c_dir[id][1];
+            }
+            break;
+        }
+        
+        default:
+            break;
+    }
+}
 
 struct Boat
 {
@@ -93,8 +186,6 @@ struct Goods
     int life;
 };
 
-Robot robot[c_robot_num + 10];
-Berth berth[c_berth_num + 10];
 Boat boat[10];
 vector<Goods> goods;
 
@@ -102,9 +193,10 @@ int money;
 
 void Init()
 {
+    //////////////////////////////////////////////////
     // load map info
-    for (size_t i = 1; i <= c_size; ++ i)
-        scanf("%s", map_ch[i] + 1);
+    for (size_t i = 0; i < c_size; ++ i)
+        scanf("%s", map_ch[i]);
 
     // load berth info
     for (size_t i = 0; i < c_berth_num; ++ i)
@@ -117,6 +209,42 @@ void Init()
     // load boat info
     scanf("%d", &Boat::boat_capacity);
 
+    // init robot info
+    for (size_t i = 0; i < c_robot_num; ++ i)
+        robot[i].id = i;
+    //////////////////////////////////////////////////
+    queue<pair<int, int> > que;
+    for (size_t i = 0; i < c_berth_num; ++ i)
+    {
+        for (int dx = 0; dx < 4; ++ dx)
+        for (int dy = 0; dy < 4; ++ dy)
+        {
+            berth[i].dis[berth[i].x + dx][berth[i].y + dy] = 0;
+            que.push(make_pair<int, int>(berth[i].x + dx, berth[i].y + dy));
+        }
+
+        while (!que.empty())
+        {
+            auto [x, y] = que.front(); que.pop();
+            for (int j = 0; j < 4; ++ j)
+            {
+                int dx = c_dir[j][0], dy = c_dir[j][1];
+                if (map_ch[x + dx][y + dy] == '*' or map_ch[x + dx][y + dy] == '#')
+                    continue;
+                if (berth[i].dis[x + dx][y + dy] > berth[i].dis[x][y] + 1)
+                {
+                    berth[i].dis[x + dx][y + dy] = berth[i].dis[x][y] + 1;
+                    que.push(make_pair<int, int>(x + dx, y + dy));
+                }
+            }
+        }
+
+        for (size_t x = 0; x < c_size; ++ x)
+        for (size_t y = 0; y < c_size; ++ y)
+            cerr << ((berth[i].dis[x][y] == INT_MAX) ? -1 : berth[i].dis[x][y]) << ((y == c_size - 1) ? '\n' : '\t');
+        
+    }
+    //////////////////////////////////////////////////
     // finish message
     char okk[100]; scanf("%s", okk);
     printf("OK\n");
@@ -141,7 +269,14 @@ size_t Input()
     // load robot info
     for (size_t i = 0; i < c_robot_num; ++ i)
     {
-        scanf("%d%d%d%d", &robot[i].goods, &robot[i].x, &robot[i].y, &robot[i].status);
+        int goods, x, y, status;
+        scanf("%d%d%d%d", &goods, &x, &y, &status);
+        if (robot[i].x != x or robot[i].y != y)
+            cerr << i << "  " << x << " , " << y << "   local: " << robot[i].x << " , " << robot[i].y << "\n";
+        robot[i].goods = goods;
+        robot[i].x = x;
+        robot[i].y = y;
+        robot[i].status = status;
     }
 
     // load boat info
@@ -167,17 +302,17 @@ void solve(int tick)
     // cerr << "sovle " << tick << "\n";
     Command::clear();
 
-    if (tick == 10)
-    {
-        for (size_t i = 0; i < c_boat_num; ++ i)
-            Command::ship(i, i + 5);
-        cerr << "go +5 " << tick << "\n";
-    }
-    else if (tick == 2000)
+    if (tick == 1)
     {
         for (size_t i = 0; i < c_boat_num; ++ i)
             Command::ship(i, i);
-        cerr << "go +0 " << tick << "\n";
+        for (size_t i = 0; i < c_robot_num; ++ i)
+            robot[i].setPull(i, 0);
+    }
+
+    for (size_t i = 0; i < c_robot_num; ++ i)
+    {
+        robot[i].step();
     }
 
     Command::print();
@@ -186,8 +321,8 @@ void solve(int tick)
 int main()
 {
 
-    // ofstream file("log.txt");
-    // streambuf *err = cerr.rdbuf(file.rdbuf());
+    ofstream file("log.txt");
+    streambuf *err = cerr.rdbuf(file.rdbuf());
 
     // solve(0);
 
@@ -205,26 +340,3 @@ int main()
 
     return 0;
 }
-/*
-114 199346
-2
-1 5 20
-5 7 30
-0 1 2 1
-1 100 150 1
-1 95 174 1
-0 14 156 1
-0 154 47 0
-1 17 41 0
-1 99 152 1
-1 92 175 1
-0 13 152 1
-0 152 41 0
-1 16 73 0
-1 2
-1 1
-0 6
-1 -1
-0 8
-
-*/
