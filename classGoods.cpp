@@ -1,7 +1,7 @@
 #ifndef CLASS_GOODS_H
 #define CLASS_GOODS_H
 
-#include "constList.hpp"
+#include "constList.cpp"
 
 class Goods
 {

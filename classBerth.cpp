@@ -2,7 +2,7 @@
 #define CLASS_BERTH_H
 
 #include <limits.h>
-#include "constList.hpp"
+#include "constList.cpp"
 
 class Berth
 {
