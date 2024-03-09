@@ -1,8 +1,8 @@
 [
 {
-  "directory": "E:/Algorithm/huawei/WindowsRelease/build",
-  "command": "E:\\lib\\mingw32\\bin\\g++.exe   -g -std=gnu++17 -o CMakeFiles\\main.dir\\main.cpp.obj -c E:\\Algorithm\\huawei\\WindowsRelease\\main.cpp",
-  "file": "E:/Algorithm/huawei/WindowsRelease/main.cpp",
+  "directory": "C:/project/WindowsRelease/build",
+  "command": "C:\\mingw64\\bin\\g++.exe   -g -std=gnu++17 -o CMakeFiles\\main.dir\\main.cpp.obj -c C:\\project\\WindowsRelease\\main.cpp",
+  "file": "C:/project/WindowsRelease/main.cpp",
   "output": "CMakeFiles/main.dir/main.cpp.obj"
 }
 ]

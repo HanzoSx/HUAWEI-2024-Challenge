@@ -1,4 +1,4 @@
-set(CMAKE_CXX_COMPILER "E:/lib/mingw32/bin/g++.exe")
+set(CMAKE_CXX_COMPILER "C:/mingw64/bin/g++.exe")
 set(CMAKE_CXX_COMPILER_ARG1 "")
 set(CMAKE_CXX_COMPILER_ID "GNU")
 set(CMAKE_CXX_COMPILER_VERSION "13.2.0")
@@ -22,14 +22,14 @@ set(CMAKE_CXX_SIMULATE_VERSION "")
 
 
 
-set(CMAKE_AR "E:/lib/mingw32/bin/ar.exe")
-set(CMAKE_CXX_COMPILER_AR "E:/lib/mingw32/bin/gcc-ar.exe")
-set(CMAKE_RANLIB "E:/lib/mingw32/bin/ranlib.exe")
-set(CMAKE_CXX_COMPILER_RANLIB "E:/lib/mingw32/bin/gcc-ranlib.exe")
-set(CMAKE_LINKER "E:/lib/mingw32/bin/ld.exe")
+set(CMAKE_AR "C:/mingw64/bin/ar.exe")
+set(CMAKE_CXX_COMPILER_AR "C:/mingw64/bin/gcc-ar.exe")
+set(CMAKE_RANLIB "C:/mingw64/bin/ranlib.exe")
+set(CMAKE_CXX_COMPILER_RANLIB "C:/mingw64/bin/gcc-ranlib.exe")
+set(CMAKE_LINKER "C:/mingw64/bin/ld.exe")
 set(CMAKE_LINKER_LINK "")
 set(CMAKE_LINKER_LLD "")
-set(CMAKE_CXX_COMPILER_LINKER "../src/gcc-13.2.0/configure --host=i686-w64-mingw32 --build=i686-w64-mingw32 --target=i686-w64-mingw32 --prefix=/mingw32 --with-sysroot=/c/buildroot/i686-1320-win32-dwarf-msvcrt-rt_v11-rev0/mingw32 --enable-host-shared --disable-multilib --enable-languages=c,c++,fortran,lto --enable-libstdcxx-time=yes --enable-threads=win32 --enable-libstdcxx-threads=yes --enable-libgomp --enable-libatomic --enable-lto --enable-graphite --enable-checking=release --enable-fully-dynamic-string --enable-version-specific-runtime-libs --enable-libstdcxx-filesystem-ts=yes --disable-sjlj-exceptions --with-dwarf2 --disable-libssp --disable-libstdcxx-pch --disable-libstdcxx-debug --enable-bootstrap --disable-rpath --disable-win32-registry --disable-nls --disable-werror --disable-symvers --with-gnu-as --with-gnu-ld --with-arch=i686 --with-tune=generic --with-libiconv --with-system-zlib --with-gmp=/c/buildroot/prerequisites/i686-w64-mingw32-static --with-mpfr=/c/buildroot/prerequisites/i686-w64-mingw32-static --with-mpc=/c/buildroot/prerequisites/i686-w64-mingw32-static --with-isl=/c/buildroot/prerequisites/i686-w64-mingw32-static --with-pkgversion='i686-win32-dwarf-rev0, Built by MinGW-Builds project' --with-bugurl=https:/github.com/niXman/mingw-builds CFLAGS='-O2 -pipe -fno-ident -I/c/buildroot/i686-1320-win32-dwarf-msvcrt-rt_v11-rev0/mingw32/opt/include -I/c/buildroot/prerequisites/i686-zlib-static/include -I/c/buildroot/prerequisites/i686-w64-mingw32-static/include' CXXFLAGS='-O2 -pipe -fno-ident -I/c/buildroot/i686-1320-win32-dwarf-msvcrt-rt_v11-rev0/mingw32/opt/include -I/c/buildroot/prerequisites/i686-zlib-static/include -I/c/buildroot/prerequisites/i686-w64-mingw32-static/include' CPPFLAGS=' -I/c/buildroot/i686-1320-win32-dwarf-msvcrt-rt_v11-rev0/mingw32/opt/include -I/c/buildroot/prerequisites/i686-zlib-static/include -I/c/buildroot/prerequisites/i686-w64-mingw32-static/include' LDFLAGS='-pipe -fno-ident -L/c/buildroot/i686-1320-win32-dwarf-msvcrt-rt_v11-rev0/mingw32/opt/lib -L/c/buildroot/prerequisites/i686-zlib-static/lib -L/c/buildroot/prerequisites/i686-w64-mingw32-static/lib -Wl,--large-address-aware' LD_FOR_TARGET=/c/buildroot/i686-1320-win32-dwarf-msvcrt-rt_v11-rev0/mingw32/bin/ld.exe")
+set(CMAKE_CXX_COMPILER_LINKER "../src/gcc-13.2.0/configure --host=x86_64-w64-mingw32 --build=x86_64-w64-mingw32 --target=x86_64-w64-mingw32 --prefix=/mingw64 --with-sysroot=/c/buildroot/x86_64-1320-win32-seh-msvcrt-rt_v11-rev0/mingw64 --enable-host-shared --disable-multilib --enable-languages=c,c++,fortran,lto --enable-libstdcxx-time=yes --enable-threads=win32 --enable-libstdcxx-threads=yes --enable-libgomp --enable-libatomic --enable-lto --enable-graphite --enable-checking=release --enable-fully-dynamic-string --enable-version-specific-runtime-libs --enable-libstdcxx-filesystem-ts=yes --disable-libssp --disable-libstdcxx-pch --disable-libstdcxx-debug --enable-bootstrap --disable-rpath --disable-win32-registry --disable-nls --disable-werror --disable-symvers --with-gnu-as --with-gnu-ld --with-arch=nocona --with-tune=core2 --with-libiconv --with-system-zlib --with-gmp=/c/buildroot/prerequisites/x86_64-w64-mingw32-static --with-mpfr=/c/buildroot/prerequisites/x86_64-w64-mingw32-static --with-mpc=/c/buildroot/prerequisites/x86_64-w64-mingw32-static --with-isl=/c/buildroot/prerequisites/x86_64-w64-mingw32-static --with-pkgversion='x86_64-win32-seh-rev0, Built by MinGW-Builds project' --with-bugurl=https:/github.com/niXman/mingw-builds CFLAGS='-O2 -pipe -fno-ident -I/c/buildroot/x86_64-1320-win32-seh-msvcrt-rt_v11-rev0/mingw64/opt/include -I/c/buildroot/prerequisites/x86_64-zlib-static/include -I/c/buildroot/prerequisites/x86_64-w64-mingw32-static/include' CXXFLAGS='-O2 -pipe -fno-ident -I/c/buildroot/x86_64-1320-win32-seh-msvcrt-rt_v11-rev0/mingw64/opt/include -I/c/buildroot/prerequisites/x86_64-zlib-static/include -I/c/buildroot/prerequisites/x86_64-w64-mingw32-static/include' CPPFLAGS=' -I/c/buildroot/x86_64-1320-win32-seh-msvcrt-rt_v11-rev0/mingw64/opt/include -I/c/buildroot/prerequisites/x86_64-zlib-static/include -I/c/buildroot/prerequisites/x86_64-w64-mingw32-static/include' LDFLAGS='-pipe -fno-ident -L/c/buildroot/x86_64-1320-win32-seh-msvcrt-rt_v11-rev0/mingw64/opt/lib -L/c/buildroot/prerequisites/x86_64-zlib-static/lib -L/c/buildroot/prerequisites/x86_64-w64-mingw32-static/lib ' LD_FOR_TARGET=/c/buildroot/x86_64-1320-win32-seh-msvcrt-rt_v11-rev0/mingw64/bin/ld.exe")
 set(CMAKE_CXX_COMPILER_LINKER_ID "")
 set(CMAKE_CXX_COMPILER_LINKER_VERSION )
 set(CMAKE_CXX_COMPILER_LINKER_FRONTEND_VARIANT )
@@ -59,7 +59,7 @@ set(CMAKE_CXX_LINKER_PREFERENCE_PROPAGATES 1)
 set(CMAKE_CXX_LINKER_DEPFILE_SUPPORTED FALSE)
 
 # Save compiler ABI information.
-set(CMAKE_CXX_SIZEOF_DATA_PTR "4")
+set(CMAKE_CXX_SIZEOF_DATA_PTR "8")
 set(CMAKE_CXX_COMPILER_ABI "")
 set(CMAKE_CXX_BYTE_ORDER "LITTLE_ENDIAN")
 set(CMAKE_CXX_LIBRARY_ARCHITECTURE "")
@@ -85,8 +85,8 @@ endif()
 
 
 
-set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "E:/lib/mingw32/lib/gcc/i686-w64-mingw32/13.2.0/include/c++;E:/lib/mingw32/lib/gcc/i686-w64-mingw32/13.2.0/include/c++/i686-w64-mingw32;E:/lib/mingw32/lib/gcc/i686-w64-mingw32/13.2.0/include/c++/backward;E:/lib/mingw32/lib/gcc/i686-w64-mingw32/13.2.0/include;E:/lib/mingw32/lib/gcc/i686-w64-mingw32/13.2.0/include-fixed;E:/lib/mingw32/i686-w64-mingw32/include")
+set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "C:/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/c++;C:/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/c++/x86_64-w64-mingw32;C:/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0/include/c++/backward;C:/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0/include;C:/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0/include-fixed;C:/mingw64/x86_64-w64-mingw32/include")
 set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "stdc++;mingw32;gcc_s;gcc;moldname;mingwex;kernel32;advapi32;shell32;user32;kernel32;iconv;mingw32;gcc_s;gcc;moldname;mingwex;kernel32")
-set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "E:/lib/mingw32/lib/gcc/i686-w64-mingw32/13.2.0;E:/lib/mingw32/lib/gcc;E:/lib/mingw32/i686-w64-mingw32/lib;E:/lib/mingw32/lib")
+set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "C:/mingw64/lib/gcc/x86_64-w64-mingw32/13.2.0;C:/mingw64/lib/gcc;C:/mingw64/x86_64-w64-mingw32/lib;C:/mingw64/lib")
 set(CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")
 set(CMAKE_CXX_COMPILER_CLANG_RESOURCE_DIR "")
