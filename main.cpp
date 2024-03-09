@@ -5,10 +5,8 @@
 #include <fstream>
 
 #include "constList.hpp"
-
 #include "classCommand.hpp"
 #include "classMap.hpp"
-
 #include "classBerth.hpp"
 #include "classBoat.hpp"
 #include "classGoods.hpp"
@@ -50,6 +48,7 @@ void Init()
     queue<pair<int, int> > que;
     for (size_t i = 0; i < c_berth_num; ++ i)
     {
+        while (!que.empty()) que.pop();
         for (int dx = 0; dx < 4; ++ dx)
         for (int dy = 0; dy < 4; ++ dy)
         {
@@ -75,6 +74,11 @@ void Init()
         // for (size_t x = 0; x < c_size; ++ x)
         // for (size_t y = 0; y < c_size; ++ y)
         //     cerr << ((berth[i].dis[x][y] == INT_MAX) ? -1 : berth[i].dis[x][y]) << ((y == c_size - 1) ? '\n' : '\t');
+    }
+
+    for (int x = 0; x < c_size; ++ x)
+    for (int y = 0; y < c_size; ++ y)
+    {
         
     }
     //////////////////////////////////////////////////
@@ -104,11 +108,11 @@ size_t Input()
     {
         int goods, x, y, status;
         scanf("%d%d%d%d", &goods, &x, &y, &status);
-        if (robot[i].x != x or robot[i].y != y)
-            cerr << i << "  " << x << " , " << y << "   local: " << robot[i].x << " , " << robot[i].y << "\n";
-        robot[i].goods = goods;
+        // if (robot[i].x != x or robot[i].y != y)
+        //     cerr << i << "  " << x << " , " << y << "   local: " << robot[i].x << " , " << robot[i].y << "\n";
         robot[i].x = x;
         robot[i].y = y;
+        robot[i].goods = goods;
         robot[i].status = status;
     }
 
@@ -143,7 +147,7 @@ void solve(int tick)
             robot[i].setPull(berth[i], 0);
     }
 
-    for (auto it : robot)
+    for (auto &it : robot)
         it.step(robot);
 
     Command::print();

@@ -29,7 +29,7 @@ void Robot::step(vector<Robot> &robot)
 
                 bool f = true;
 
-                for (auto other : robot)
+                for (auto &other : robot)
                     if (other.x == dx and other.y == dy)
                     {
                         f = false;

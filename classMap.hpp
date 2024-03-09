@@ -2,6 +2,7 @@
 #define CLASS_MAP_H
 
 #include "constList.hpp"
+#include "classBerth.hpp"
 
 class Map
 {
@@ -13,6 +14,7 @@ public:
     }
 
     char ch[N][N];
+    Berth* nearest_berth[N][N];
 
 }   map;
 
