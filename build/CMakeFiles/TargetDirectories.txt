@@ -1,3 +1,0 @@
-C:/project/WindowsRelease/build/CMakeFiles/main.dir
-C:/project/WindowsRelease/build/CMakeFiles/edit_cache.dir
-C:/project/WindowsRelease/build/CMakeFiles/rebuild_cache.dir
