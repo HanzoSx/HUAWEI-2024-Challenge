@@ -4,12 +4,12 @@
 #include <iostream>
 #include <fstream>
 
-#include "constList.cpp"
-#include "classCommand.cpp"
-#include "classMap.cpp"
-#include "classBerth.cpp"
-#include "classBoat.cpp"
-#include "classGoods.cpp"
+#include "constList.hpp"
+#include "classCommand.hpp"
+#include "classMap.hpp"
+#include "classBerth.hpp"
+#include "classBoat.hpp"
+#include "classGoods.hpp"
 
 #include "classRobot.hpp"
 

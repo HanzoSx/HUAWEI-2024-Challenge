@@ -1,8 +1,8 @@
 #ifndef CLASS_MAP_H
 #define CLASS_MAP_H
 
-#include "constList.cpp"
-#include "classBerth.cpp"
+#include "constList.hpp"
+#include "classBerth.hpp"
 
 class Map
 {
