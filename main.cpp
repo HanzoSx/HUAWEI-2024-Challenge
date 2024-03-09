@@ -11,7 +11,7 @@
 #include "classBoat.hpp"
 #include "classGoods.hpp"
 
-#include "classRobot.cpp"
+#include "classRobot.hpp"
 
 using namespace std;
 
@@ -76,8 +76,8 @@ void Init()
         //     cerr << ((berth[i].dis[x][y] == INT_MAX) ? -1 : berth[i].dis[x][y]) << ((y == c_size - 1) ? '\n' : '\t');
     }
 
-    for (int x = 0; x < c_size; ++ x)
-    for (int y = 0; y < c_size; ++ y)
+    // for (int x = 0; x < c_size; ++ x)
+    // for (int y = 0; y < c_size; ++ y)
     {
         
     }
@@ -156,8 +156,8 @@ void solve(int tick)
 int main()
 {
 
-    ofstream file("log.txt");
-    streambuf *err = cerr.rdbuf(file.rdbuf());
+    // ofstream file("_log.txt");
+    // streambuf *err = cerr.rdbuf(file.rdbuf());
 
     // solve(0);
 
@@ -167,10 +167,12 @@ int main()
     {
         Input();
 
-        // for (size_t i = 0; i < c_robot_num; ++ i)
-        //     printf("move %d %d\n", i, rand() % 4);
+        for (size_t i = 0; i < c_robot_num; ++ i)
+            printf("move %d %d\n", i, rand() % 4);
+        printf("OK\n");
+        fflush(stdout);
 
-        solve(tick);
+        // solve(tick);
     }
 
     return 0;

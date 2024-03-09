@@ -72,5 +72,6 @@
         "valarray": "cpp",
         "format": "cpp"
     },
-    "C_Cpp.autocompleteAddParentheses": true
+    "C_Cpp.autocompleteAddParentheses": true,
+    "cmake.configureOnOpen": true
 }
