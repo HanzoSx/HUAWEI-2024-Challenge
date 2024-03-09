@@ -147,4 +147,10 @@ CMakeFiles/main.dir/main.cpp.obj: \
  E:/lib/mingw32/lib/gcc/i686-w64-mingw32/13.2.0/include/c++/i686-w64-mingw32/bits/basic_file.h \
  E:/lib/mingw32/lib/gcc/i686-w64-mingw32/13.2.0/include/c++/i686-w64-mingw32/bits/c++io.h \
  E:/lib/mingw32/lib/gcc/i686-w64-mingw32/13.2.0/include/c++/bits/fstream.tcc \
- E:\Algorithm\huawei\WindowsRelease\constList.hpp
+ E:\Algorithm\huawei\WindowsRelease\constList.hpp \
+ E:\Algorithm\huawei\WindowsRelease\classCommand.hpp \
+ E:\Algorithm\huawei\WindowsRelease\classMap.hpp \
+ E:\Algorithm\huawei\WindowsRelease\classBerth.hpp \
+ E:\Algorithm\huawei\WindowsRelease\classBoat.hpp \
+ E:\Algorithm\huawei\WindowsRelease\classGoods.hpp \
+ E:\Algorithm\huawei\WindowsRelease\classRobot.hpp

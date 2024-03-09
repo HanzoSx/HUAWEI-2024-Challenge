@@ -6,48 +6,47 @@
 
 
 #include "constList.hpp"
-// #include "classCommand.hpp"
-// #include "classMap.hpp"
-// #include "classBerth.hpp"
-// #include "classBoat.hpp"
-// #include "classGoods.hpp"
+#include "classCommand.hpp"
+#include "classMap.hpp"
+#include "classBerth.hpp"
+#include "classBoat.hpp"
+#include "classGoods.hpp"
 
-// #include "classRobot.hpp"
+#include "classRobot.hpp"
 
 using namespace std;
 
-// Berth berth[c_berth_num + 10];
-// Boat boat[10];
-// vector<Robot> robot;
-// vector<Goods> goods;
+Berth berth[c_berth_num + 10];
+Boat boat[10];
+vector<Robot> robot;
+vector<Goods> goods;
 
 int money;
 
-void _Init()
+void Init()
 {
     int tmp[10]; char ch[210];
     //////////////////////////////////////////////////
     // load map info
     for (size_t i = 0; i < c_size; ++ i)
-        cin >> ch;//, map.ch[i]);
+        cin >> map.ch[i];
 
     // load berth info
     for (size_t i = 0; i < c_berth_num; ++ i)
     {
         int id;
         cin >> id;
-        cin >> tmp[0] >> tmp[1] >> tmp[2] >> tmp[3];//, &berth[id].x, &berth[id].y, &berth[id].transport_time, &berth[id].loading_speed);
+        cin >> berth[id].x >> berth[id].y >> berth[id].transport_time >> berth[id].loading_speed;
     }
 
     // load boat info
-    cin >> tmp[0];//, &Boat::boat_capacity);
+    cin >> Boat::boat_capacity;
 
     // init robot info
-    // robot.resize(c_robot_num);
-    // for (size_t i = 0; i < c_robot_num; ++ i)
-    //     robot[i].id = i;
+    robot.resize(c_robot_num);
+    for (size_t i = 0; i < c_robot_num; ++ i)
+        robot[i].id = i;
     //////////////////////////////////////////////////
-    /*
     queue<pair<int, int> > que;
     for (size_t i = 0; i < c_berth_num; ++ i)
     {
@@ -83,7 +82,7 @@ void _Init()
     // for (int y = 0; y < c_size; ++ y)
     {
 
-    } */
+    }
     //////////////////////////////////////////////////
     // finish message
     char okk[100]; cin >> okk;
@@ -103,7 +102,7 @@ size_t Input()
     {
         int x, y, val;
         cin >> x >> y >> val;
-        // goods.emplace_back(x, y, val);
+        goods.emplace_back(x, y, val);
     }
 
     // load robot info
@@ -113,31 +112,30 @@ size_t Input()
         cin >> goods >> x >> y >> status;
         // if (robot[i].x != x or robot[i].y != y)
         //     cerr << i << "  " << x << " , " << y << "   local: " << robot[i].x << " , " << robot[i].y << "\n";
-        // robot[i].x = x;
-        // robot[i].y = y;
-        // robot[i].goods = goods;
-        // robot[i].status = status;
+        robot[i].x = x;
+        robot[i].y = y;
+        robot[i].goods = goods;
+        robot[i].status = status;
     }
 
     // load boat info
     for (size_t i = 0; i < c_boat_num; ++ i)
     {
         int status, pos;
-        cin >> status >> pos;/*
+        cin >> status >> pos;
         if (boat[i].status != status or boat[i].pos != pos)
         {
             boat[i].status = static_cast<Boat::Status>(status);
             boat[i].pos = pos;
             // cerr << id << " " << boat[i].status << " " << boat[i].pos << "\n";
         }
-        */
     }
 
     // finish message
     char okk[100]; cin >> okk;
     return id;
 }
-/*
+
 void solve(int tick)
 {
     // cerr << "sovle " << tick << "\n";
@@ -156,40 +154,6 @@ void solve(int tick)
 
     Command::print();
 }
-*/
-/*
-struct Berth
-{
-    int x;
-    int y;
-    int transport_time;
-    int loading_speed;
-    Berth(){}
-    Berth(int x, int y, int transport_time, int loading_speed) {
-        this -> x = x;
-        this -> y = y;
-        this -> transport_time = transport_time;
-        this -> loading_speed = loading_speed;
-    }
-}berth[10 + 10]; int boat_capacity;
-char ch[N][N];
-void Init()
-{
-    for(int i = 1; i <= 200; i ++)
-        scanf("%s", ch[i] + 1);
-    for(int i = 0; i < 10; i ++)
-    {
-        int id;
-        scanf("%d", &id);
-        scanf("%d%d%d%d", &berth[id].x, &berth[id].y, &berth[id].transport_time, &berth[id].loading_speed);
-    }
-    scanf("%d", &boat_capacity);
-    char okk[100];
-    scanf("%s", okk);
-    printf("OK\n");
-    fflush(stdout);
-}
-*/
 
 int main()
 {
@@ -199,18 +163,18 @@ int main()
 
     // solve(0);
 
-    _Init();
+    Init();
     
     for (size_t tick = 1; tick <= 15000; tick ++)
     {
         Input();
 
-        for (size_t i = 0; i < c_robot_num; ++ i)
-            cout << "move " << i << " " << rand() % 4 << "\n";
-        cout << "OK\n";
-        fflush(stdout);
+        // for (size_t i = 0; i < c_robot_num; ++ i)
+        //     cout << "move " << i << " " << rand() % 4 << "\n";
+        // cout << "OK\n";
+        // fflush(stdout);
 
-        // solve(tick);
+        solve(tick);
     }
 
     return 0;
