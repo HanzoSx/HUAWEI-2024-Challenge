@@ -4,190 +4,22 @@
 #include <iostream>
 #include <fstream>
 
+#include "constList.hpp"
+
+#include "classCommand.hpp"
+#include "classMap.hpp"
+
+#include "classBerth.hpp"
+#include "classBoat.hpp"
+#include "classGoods.hpp"
+
+#include "classRobot.cpp"
+
 using namespace std;
 
-const int c_dir[4][2] = {{0, 1}, {0, -1}, {-1, 0}, {1, 0}};
-
-const int c_size = 200;
-const int c_robot_num = 10;
-const int c_berth_num = 10;
-const int c_boat_num = 5;
-
-const int c_time_berth2b = 500;
-const int c_time_goodslife = 1000;
-
-const int N = c_size + 10;
-char map_ch[N][N];
-
-class Command
-{
-public:
-
-    static void print()
-    {
-        for (auto& it : RobotCmd) printf("%s\n", it.c_str());
-        for (auto& it : BoatCmd) printf("%s\n", it.c_str());
-        
-        printf("OK\n");
-        fflush(stdout);
-    }
-
-    static void clear()
-    {
-        RobotCmd.clear();
-        BoatCmd.clear();
-    }
-
-    static void move(size_t id, int direcet)  { RobotCmd.emplace_back("move " + to_string(id) + " " + to_string(direcet)); }
-    static void get(size_t id)                { RobotCmd.emplace_back("get " + to_string(id)); }
-    static void pull(size_t id)               { RobotCmd.emplace_back("pull " + to_string(id)); }
-
-    static void ship(size_t id, int berth_id) { BoatCmd.emplace_back("ship " + to_string(id) + " " + to_string(berth_id)); }
-    static void go(size_t id)                 { BoatCmd.emplace_back("go " + to_string(id)); }
-
-private:
-
-    static vector<string> RobotCmd, BoatCmd;
-
-};
-vector<string> Command::RobotCmd, Command::BoatCmd;
-
-struct Berth
-{
-    Berth()
-    {
-        for (int x = 0; x < c_size; ++ x)
-        for (int y = 0; y < c_size; ++ y)
-            dis[x][y] = INT_MAX;
-    }
-
-    int x, y;
-    int transport_time;
-    int loading_speed;
-
-    int dis[N][N];
-};
 Berth berth[c_berth_num + 10];
-
-struct Robot
-{
-    Robot() {}
-    Robot(int startX, int startY) : x(startX), y(startY) {}
-
-    int id, status;
-    int x, y, goods;
-
-    enum Work
-    {
-        Get = 0,
-        Pull
-    };
-    Work work;
-
-    struct GetInfo
-    {
-        int x, y;
-        // vector<pair<int, int> > path;
-    };
-
-    struct PullInfo
-    {
-        int berth_id, distence;
-    };
-
-    union
-    {
-        GetInfo get;
-        PullInfo pull;
-    };
-
-    void setPull(int berth_id, int distence)
-    {
-        work = Work::Pull;
-        pull.berth_id = berth_id;
-        pull.distence = distence;
-    }
-
-    void setGet(int x, int y)
-    {
-        work = Work::Get;
-        
-    }
-
-    void step();
-
-};
-Robot robot[c_robot_num + 10];
-
-void Robot::step()
-{
-    switch (work)
-    {
-        case Work::Pull:
-        {
-            int tmpDir = -1, tmpDis = INT_MAX;
-            for (int i = 0; i < 4; ++ i)
-            {
-                int dx = x + c_dir[i][0], dy = y + c_dir[i][1];
-
-                bool f = true;
-                for (size_t index = 0; index < c_robot_num; ++ index)
-                    if (robot[index].x == dx and robot[index].y == dy)
-                    {
-                        f = false;
-                        break;
-                    }
-
-                if (map_ch[dx][dy] == '*' or map_ch[dx][dy] == '#')
-                    f = false;
-                
-                if (f and berth[pull.berth_id].dis[dx][dy] < tmpDis)
-                {
-                    tmpDir = i;
-                    tmpDis = berth[pull.berth_id].dis[dx][dy];
-                }
-            }
-
-            if (tmpDir > -1)
-            {
-                Command::move(id, tmpDir);
-                x += c_dir[tmpDir][0];
-                y += c_dir[tmpDir][1];
-            }
-            break;
-        }
-        
-        default:
-            break;
-    }
-}
-
-struct Boat
-{
-    Boat() : num(0), pos(-1), status(done) {}
-
-    int num, pos;
-    enum Status
-    {
-        moving = 0,
-        done,
-        wait
-    }   status;
-
-    static int boat_capacity;
-};
-int Boat::boat_capacity = 0;
-
-struct Goods
-{
-    Goods() : life(c_time_goodslife) {}
-    Goods(int x, int y, int val) : x(x), y(y), val(val), life(c_time_goodslife) {}
-
-    int x, y, val;
-    int life;
-};
-
 Boat boat[10];
+vector<Robot> robot;
 vector<Goods> goods;
 
 int money;
@@ -197,7 +29,7 @@ void Init()
     //////////////////////////////////////////////////
     // load map info
     for (size_t i = 0; i < c_size; ++ i)
-        scanf("%s", map_ch[i]);
+        scanf("%s", map.ch[i]);
 
     // load berth info
     for (size_t i = 0; i < c_berth_num; ++ i)
@@ -211,6 +43,7 @@ void Init()
     scanf("%d", &Boat::boat_capacity);
 
     // init robot info
+    robot.resize(c_robot_num);
     for (size_t i = 0; i < c_robot_num; ++ i)
         robot[i].id = i;
     //////////////////////////////////////////////////
@@ -230,8 +63,7 @@ void Init()
             for (int j = 0; j < 4; ++ j)
             {
                 int dx = x + c_dir[j][0], dy = y + c_dir[j][1];
-                if (map_ch[dx][dy] == '*' or map_ch[dx][dy] == '#')
-                    continue;
+                if (!map.walkable(dx, dy)) continue;
                 if (berth[i].dis[dx][dy] > berth[i].dis[x][y] + 1)
                 {
                     berth[i].dis[dx][dy] = berth[i].dis[x][y] + 1;
@@ -308,13 +140,11 @@ void solve(int tick)
         for (size_t i = 0; i < c_boat_num; ++ i)
             Command::ship(i, i);
         for (size_t i = 0; i < c_robot_num; ++ i)
-            robot[i].setPull(i, 0);
+            robot[i].setPull(berth[i], 0);
     }
 
-    for (size_t i = 0; i < c_robot_num; ++ i)
-    {
-        robot[i].step();
-    }
+    for (auto it : robot)
+        it.step(robot);
 
     Command::print();
 }
