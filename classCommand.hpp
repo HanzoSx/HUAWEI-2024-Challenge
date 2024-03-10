@@ -13,10 +13,10 @@ public:
 
     static void print()
     {
-        for (auto& it : RobotCmd) printf("%s\n", it.c_str());
-        for (auto& it : BoatCmd) printf("%s\n", it.c_str());
+        for (auto& it : RobotCmd) cout << it << "\n";
+        for (auto& it : BoatCmd) cout << it << "\n";
         
-        printf("OK\n");
+        cout << "OK\n";
         fflush(stdout);
     }
 
