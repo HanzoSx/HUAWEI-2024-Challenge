@@ -2,20 +2,44 @@
 #define CLASS_MAP_H
 
 #include "constList.hpp"
-#include "classBerth.hpp"
 
-class Map
+char ch[N][N];
+bool walkable(int x, int y)
+{
+    return ch[x][y] != '*' and ch[x][y] != '#';
+}
+
+class DisMap
 {
 public:
 
-    bool walkable(int x, int y)
-    {
-        return ch[x][y] != '*' and ch[x][y] != '#';
-    }
+    DisMap();
 
-    char ch[N][N];
-    Berth* nearest_berth[N][N];
+    void setZeroRect(int x, int y, int width, int height);
+    void creat();
 
-}   map;
+    int dis[N][N];
+
+};
+
+DisMap::DisMap()
+{
+    for (int x = 0; x < c_size; ++ x)
+    for (int y = 0; y < c_size; ++ y)
+        dis[x][y] = INT_MAX;
+}
+
+void DisMap::setZeroRect(int x, int y, int width, int height)
+{
+    for (int dx = x; dx < x + width; ++ dx)
+    for (int dy = x; dy < x + height; ++ dy)
+        dis[dx][dy] = 0;
+}
+
+void DisMap::creat()
+{
+    
+}
+
 
 #endif
