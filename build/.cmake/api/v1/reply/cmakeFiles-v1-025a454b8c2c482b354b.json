@@ -154,8 +154,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "E:/Algorithm/huawei/WindowsRelease/build",
-		"source" : "E:/Algorithm/huawei/WindowsRelease"
+		"build" : "C:/project/WindowsRelease/build",
+		"source" : "C:/project/WindowsRelease"
 	},
 	"version" : 
 	{
