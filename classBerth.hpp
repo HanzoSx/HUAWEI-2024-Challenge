@@ -4,22 +4,31 @@
 #include <limits.h>
 #include "constList.hpp"
 
+#include "classMap.hpp"
+
 class Berth
 {
 public:
 
-    Berth()
+    Berth(int x, int y, int trans_time, int load_speed) :
+    x          (x),
+    y          (y),
+    trans_time (trans_time),
+    load_speed (load_speed)
     {
-        for (int x = 0; x < c_size; ++ x)
-        for (int y = 0; y < c_size; ++ y)
-            dis[x][y] = INT_MAX;
+        map.setZeroRect(x, y, 4, 4);
+        map.creat();
     }
 
     int x, y;
-    int transport_time;
-    int loading_speed;
+    int trans_time, load_speed;
 
-    int dis[N][N];
+    DisMap& getMap() { return map; }
+
+private:
+
+    DisMap map;
+
 };
 
 #endif

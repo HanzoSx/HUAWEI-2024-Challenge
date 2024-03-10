@@ -2,12 +2,10 @@
 #define CLASS_ROBOT_H
 
 #include <vector>
+#include <limits.h>
 
 #include "constList.hpp"
-#include "classBerth.hpp"
-#include "classGoods.hpp"
 
-#include <limits.h>
 #include "classCommand.hpp"
 #include "classMap.hpp"
 
@@ -17,97 +15,70 @@ class Robot
 {
 public:
 
-    Robot() {}
-    Robot(int startX, int startY) : x(startX), y(startY) {}
+    Robot() : map(nullptr) {}
 
+    void move(int direction);
+    void get();
+    void pull();
 
-    enum Work
-    {
-        Get = 0,
-        Pull
-    };
-    Work work;
-
-    struct GetInfo
-    {
-        int x, y;
-        // vector<pair<int, int> > path;
-    };
-
-    struct PullInfo
-    {
-        Berth *berth;
-        int distence;
-    };
-
-    union
-    {
-        GetInfo get;
-        PullInfo pull;
-    };
-
-    void setPull(Berth& berth, int distence);
-    void setGet(Goods& goods);
+    void setDisMap(DisMap &map);
     void step(vector<Robot> &robot);
 
-    int id, status;
-    int x, y, goods;
+    DisMap *map;
+
+    int id, status, x, y, goods;
 
 };
 
-void Robot::setPull(Berth& berth, int distence)
+void Robot::move(int direction)
 {
-    work = Work::Pull;
-    pull.berth = &berth;
-    pull.distence = distence;
+    if (direction < 0 or direction > 3) return;
+    Command::move(id, direction);
+    x += c_dir[id][0];
+    y += c_dir[id][1];
 }
 
-void Robot::setGet(Goods& goods)
+void Robot::get()
 {
-    work = Work::Get;
+    Command::get(id);
+}
+
+void Robot::pull()
+{
+    Command::pull(id);
+}
+
+void Robot::setDisMap(DisMap &map)
+{
+    this->map = &map;
 }
 
 void Robot::step(vector<Robot> &robot)
 {
-    switch (work)
+    if (map == nullptr or map->dis[x][y] == 0) return;
+
+    int tmpDir = -1, tmpDis = INT_MAX;
+    for (int i = 0; i < 4; ++ i)
     {
-        case Work::Pull:
-        {
-            int tmpDir = -1, tmpDis = INT_MAX;
-            for (int i = 0; i < 4; ++ i)
+        int dx = x + c_dir[i][0], dy = y + c_dir[i][1];
+
+        bool f = true;
+
+        for (auto &other : robot)
+            if (other.x == dx and other.y == dy)
             {
-                int dx = x + c_dir[i][0], dy = y + c_dir[i][1];
-
-                bool f = true;
-
-                for (auto &other : robot)
-                    if (other.x == dx and other.y == dy)
-                    {
-                        f = false;
-                        break;
-                    }
-                if (!map.walkable(dx, dy))
-                    f = false;
-                
-                if (f and pull.berth->dis[dx][dy] < tmpDis)
-                {
-                    tmpDir = i;
-                    tmpDis = pull.berth->dis[dx][dy];
-                }
+                f = false;
+                break;
             }
-
-            if (tmpDir > -1)
-            {
-                Command::move(id, tmpDir);
-                x += c_dir[tmpDir][0];
-                y += c_dir[tmpDir][1];
-            }
-            break;
-        }
+        if (!walkable(dx, dy)) f = false;
         
-        default:
-            break;
+        if (f and map->dis[dx][dy] < tmpDis)
+        {
+            tmpDir = i;
+            tmpDis = map->dis[dx][dy];
+        }
     }
+    move(tmpDir);
 }
 
 
