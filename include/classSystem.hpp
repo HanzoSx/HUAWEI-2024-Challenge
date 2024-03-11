@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <fstream>
 
 #include "classRobot.hpp"
 #include "classBoat.hpp"
@@ -18,11 +19,16 @@ public:
     static std::vector<Berth> berth;
     static std::vector<Goods> goods;
 
-    static int tick;
+    static int tick, money;
     
+    static std::ofstream log_file;
+
+    static void Init();
+    static size_t Input();
+
     static const bool __OUTPUT_LOG__ = true;
     static const bool __OUTPUT_ERR__ = true;
-    static const bool __OUTPUT_INFO__ = false;
+    static const bool __OUTPUT_INFO__ = true;
     static void log(std::string type, std::string log);
 
     static bool getGoods(int x, int y);

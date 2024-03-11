@@ -8,6 +8,7 @@ const int c_robot_num = 10;
 const int c_berth_num = 10;
 const int c_boat_num = 5;
 
+const int c_time_totaltick = 15000;
 const int c_time_berth2b = 500;
 const int c_time_goodslife = 1000;
 

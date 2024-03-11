@@ -4,13 +4,15 @@
 #include <vector>
 #include <string>
 
+class System;
+
 class DisMap;
 
 class Robot
 {
 public:
 
-    Robot() : map(nullptr) {}
+    Robot();
 
     void move(int direction);
     void get();
@@ -27,6 +29,7 @@ public:
 private:
 
     std::string info();
+    friend class System;
 
 };
 

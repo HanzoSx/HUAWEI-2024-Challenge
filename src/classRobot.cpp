@@ -8,6 +8,8 @@
 #include "classMap.hpp"
 #include "classSystem.hpp"
 
+ Robot::Robot() : id(0), x(0), y(0), goods(0), status(0), map(nullptr) {}
+
 void Robot::move(int direction)
 {
     if (direction < 0 or direction > 3)
@@ -93,5 +95,5 @@ void Robot::step(vector<Robot> &robot)
 
 std::string Robot::info()
 {
-    return "Robot" + to_string(id) + "[" + to_string(x) + ", " + to_string(y) + "] ";
+    return "Robot " + to_string(id) + "[" + to_string(x) + ", " + to_string(y) + ", " + to_string(goods) + "] ";
 }
