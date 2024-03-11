@@ -30,7 +30,15 @@ void Init()
     {
         int id, x, y, trans_time, loading_speed;
         cin >> id >> x >> y >> trans_time >> loading_speed;
+        // cerr << id << x << y << trans_time << loading_speed;
         System::berth.emplace_back(x, y, trans_time, loading_speed);
+
+        // for (int x = 0; x < c_size; ++ x)
+        // for (int y = 0; y < c_size; ++ y)
+        // {
+        //     int d = System::berth.back().dis[x][y];
+        //     cerr << ((d == INT_MAX) ? -1 : d) << ((y == c_size - 1) ? "\n" : "\t");
+        // }
     }
 
     // load boat info
@@ -59,7 +67,7 @@ size_t Input()
     {
         int x, y, val;
         cin >> x >> y >> val;
-        System::goods.emplace_back(x, y, val, tick);
+        // System::goods.emplace_back(x, y, val, tick);
     }
 
     // load robot info
@@ -69,10 +77,10 @@ size_t Input()
         cin >> goods >> x >> y >> status;
         // if (robot[i].x != x or robot[i].y != y)
         //     cerr << i << "  " << x << " , " << y << "   local: " << robot[i].x << " , " << robot[i].y << "\n";
-        // System::robot[i].x = x;
-        // System::robot[i].y = y;
-        // System::robot[i].goods = goods;
-        // System::robot[i].status = status;
+        System::robot[i].x = x;
+        System::robot[i].y = y;
+        System::robot[i].goods = goods;
+        System::robot[i].status = status;
     }
 
     // load boat info
@@ -82,8 +90,8 @@ size_t Input()
         cin >> status >> pos;
         // if (boat[i].status != status or boat[i].pos != pos)
         //     cerr << id << " " << boat[i].status << " " << boat[i].pos << "\n";
-        // System::boat[i].status = static_cast<Boat::Status>(status);
-        // System::boat[i].pos = pos;
+        System::boat[i].status = static_cast<Boat::Status>(status);
+        System::boat[i].pos = pos;
     }
 
     // finish message
@@ -127,7 +135,10 @@ int main()
     for (int i = 1; i <= 15000; ++ i)
     {
         // sdk_Input();
-        System::tick = Input();
+        int _tick = Input();
+        if (_tick != System::tick + 1)
+            System::log("ERR", "Tick " + std::to_string(System::tick) + " -> " + std::to_string(_tick));
+        System::tick = _tick;
 
         Command::clear();
         solve(System::tick);

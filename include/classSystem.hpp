@@ -22,7 +22,7 @@ public:
     
     static const bool __OUTPUT_LOG__ = true;
     static const bool __OUTPUT_ERR__ = true;
-    static const bool __OUTPUT_INFO__ = true;
+    static const bool __OUTPUT_INFO__ = false;
     static void log(std::string type, std::string log);
 
     static bool getGoods(int x, int y);

@@ -12,7 +12,7 @@ void Robot::move(int direction)
 {
     if (direction < 0 or direction > 3)
     {
-        System::log("INFO", info() + "can't move");
+        System::log("ERR", info() + "can't move");
         return;
     }
     Command::move(id, direction);

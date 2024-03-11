@@ -15,6 +15,10 @@ public:
     void setZeroRect(int x, int y, int width, int height);
     void creat();
 
+    struct ZeroRect
+    {
+        int x, y, width, height;
+    }   zeroRect;
     int dis[N][N];
 
     static char ch[N][N];

@@ -4,7 +4,7 @@
 
 bool walkable(int x, int y)
 {
-    return x >= 0 and x < c_size and y > 0 and y < c_size and
+    return x >= 0 and x < c_size and y >= 0 and y < c_size and
         DisMap::ch[x][y] != '*' and DisMap::ch[x][y] != '#';
 }
 
@@ -17,28 +17,28 @@ DisMap::DisMap()
 
 void DisMap::setZeroRect(int x, int y, int width, int height)
 {
+    zeroRect = {x, y, width, height};
     for (int dx = x; dx < x + width; ++ dx)
-    for (int dy = x; dy < x + height; ++ dy)
+    for (int dy = y; dy < y + height; ++ dy)
         dis[dx][dy] = 0;
 }
 
 void DisMap::creat()
 {
-    std::pair<int, int> t;
-    int x, y;
     std::queue < std::pair<int, int> > Q;
-    for (int x = 0; x < c_size; ++ x)
-    for (int y = 0; y < c_size; ++ y)
+    for (int x = zeroRect.x; x < zeroRect.x + zeroRect.width; ++ x)
+    for (int y = zeroRect.y; y < zeroRect.y + zeroRect.height; ++ y)
         if (dis[x][y] == 0)
             Q.push(std::make_pair(x, y));
+
     while (!Q.empty())
     {
-        t=Q.front();
+        auto [x, y] = Q.front();
         Q.pop();
-        x=t.first;
-        y=t.second;
+
         for (int i = 0; i < 4; ++ i)
-            if (walkable(x + c_dir[i][0], y + c_dir[i][1]) and dis[x][y] + 1 < dis[x + c_dir[i][0]][y + c_dir[i][1]])
+            if (walkable(x + c_dir[i][0], y + c_dir[i][1]) and
+                dis[x][y] + 1 < dis[x + c_dir[i][0]][y + c_dir[i][1]])
             {
                 Q.push(std::make_pair(x + c_dir[i][0], y + c_dir[i][1]));
                 dis[x + c_dir[i][0]][y + c_dir[i][1]] = dis[x][y] + 1;
