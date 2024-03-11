@@ -11,7 +11,7 @@ public:
 
     void go(int target);
 
-    int id, num, pos;
+    int id, pos;
     enum Status
     {
         moving = 0,
