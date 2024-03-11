@@ -2,6 +2,8 @@
 #define CLASS_BERTH_H
 
 #include <limits.h>
+#include <queue>
+
 #include "constList.hpp"
 #include "classMap.hpp"
 
@@ -13,6 +15,8 @@ public:
 
     int x, y;
     int trans_time, load_speed;
+
+    std::queue<int> goods;
 
 };
 
