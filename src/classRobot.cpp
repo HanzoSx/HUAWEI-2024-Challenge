@@ -35,6 +35,7 @@ void Robot::get()
     if (System::getGoods(x, y))
     {
         goods = 1;
+        map = nullptr;
         System::log("INFO", info() + "get");
     }
     else
