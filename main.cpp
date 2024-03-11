@@ -13,7 +13,7 @@
 
 #include "classSystem.hpp"
 
-#include "sdk.hpp"
+// #include "sdk.hpp"
 
 using namespace std;
 
@@ -124,15 +124,13 @@ void solve(int tick)
 
 int main()
 {
-
-    ofstream file("_log.txt");
-    streambuf *err = cerr.rdbuf(file.rdbuf());
+    cerr.rdbuf(ofstream("_log.txt").rdbuf());
 
     // sdk_Init();
     Init();
     
-    // while (System::tick < 15000)
-    for (int i = 1; i <= 15000; ++ i)
+    while (System::tick < 15000)
+    // for (int i = 1; i <= 15000; ++ i)
     {
         // sdk_Input();
         int _tick = Input();

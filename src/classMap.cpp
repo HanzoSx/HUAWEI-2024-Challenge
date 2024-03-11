@@ -28,8 +28,7 @@ void DisMap::creat()
     std::queue < std::pair<int, int> > Q;
     for (int x = zeroRect.x; x < zeroRect.x + zeroRect.width; ++ x)
     for (int y = zeroRect.y; y < zeroRect.y + zeroRect.height; ++ y)
-        if (dis[x][y] == 0)
-            Q.push(std::make_pair(x, y));
+        Q.push(std::make_pair(x, y));
 
     while (!Q.empty())
     {
