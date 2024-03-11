@@ -9,7 +9,9 @@ public:
 
     static int boat_capacity;
 
-    int num, pos;
+    void go(int target);
+
+    int id, num, pos;
     enum Status
     {
         moving = 0,

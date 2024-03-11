@@ -9,6 +9,8 @@
 
 // #include "sdk.hpp"
 
+
+
 void solve(int tick)
 {
     if (tick == 1)
@@ -22,11 +24,6 @@ void solve(int tick)
     for (auto &it : System::robot)
         it.step(System::robot);
 
-    for (auto it = System::goods.begin(); it != System::goods.end();)
-        if ((*it).life(System::tick) <= 0)
-            System::goods.erase(it);
-        else
-            ++ it;
 
     // clog << "goods_cnt = " << System::goods.size() << "\n";
 
@@ -55,15 +52,18 @@ int main()
     // sdk_Init();
     System::Init();
     
-    while (System::tick < 15000)
+    while (System::tick < c_time_totaltick)
     // for (int i = 1; i <= 15000; ++ i)
     {
         // sdk_Input();
         System::Input();
+        System::Update_front();
 
         Command::clear();
         solve(System::tick);
         Command::print();
+
+        System::Update_back();
     }
 
     return 0;

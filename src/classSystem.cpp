@@ -11,12 +11,15 @@ std::vector<Goods> System::goods;
 int System::tick = 0;
 int System::money = 0;
 
-std::ofstream System::log_file("_log.txt");
+std::ofstream System::log_file;
 
 void System::Init()
 {
     if (__OUTPUT_LOG__)
+    {
+        log_file.open("_log.txt");
         std::cerr.rdbuf(log_file.rdbuf());
+    }
 
     // load map info
     for (size_t i = 0; i < c_size; ++ i)
@@ -40,6 +43,8 @@ void System::Init()
 
     // load boat info
     System::boat.resize(c_boat_num);
+    for (size_t i = 0; i < c_boat_num; ++ i)
+        System::boat[i].id = i;
     std::cin >> Boat::boat_capacity;
 
     // init robot info
@@ -108,6 +113,37 @@ size_t System::Input()
     return tick;
 }
 
+void System::Update_front()
+{
+    // goods disappear
+    for (auto it = System::goods.begin(); it != System::goods.end();)
+        if ((*it).life(System::tick) <= 0)
+            System::goods.erase(it);
+        else
+            ++ it;
+
+    // ship update
+    for (auto &it : System::boat)
+        if (it.status == Boat::Status::done and it.pos == -1)
+        {
+            it.goods = 0;
+        }
+}
+
+void System::Update_back()
+{
+    // ship update
+    for (auto &it : System::boat)
+        if (it.status == Boat::Status::done and it.pos != -1)
+            for (size_t i = 1; i <= System::berth[it.pos].load_speed; ++ i)
+            {
+                if (System::berth[it.pos].goods.empty() or it.goods >= Boat::boat_capacity)
+                    break;
+                it.goods ++;
+                System::berth[it.pos].goods.pop();
+            }
+            
+}
 
 void System::log(std::string type, std::string log)
 {
