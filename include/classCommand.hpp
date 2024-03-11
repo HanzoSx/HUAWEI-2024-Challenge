@@ -38,7 +38,6 @@ private:
     static vector<string> RobotCmd, BoatCmd;
 
 };
-vector<string> Command::RobotCmd, Command::BoatCmd;
 
 
 #endif

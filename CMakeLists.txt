@@ -8,5 +8,8 @@ if (!WIN32)
     link_libraries(pthread rt m)
 endif (!WIN32)
 
+include_directories(include)
+
 AUX_SOURCE_DIRECTORY(. src)
+AUX_SOURCE_DIRECTORY(./src src)
 ADD_EXECUTABLE(main ${src})

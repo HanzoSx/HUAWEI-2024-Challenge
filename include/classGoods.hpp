@@ -5,25 +5,23 @@
 
 #include "classMap.hpp"
 
-class Goods
+class Goods : public DisMap
 {
 public:
 
     Goods(int x, int y, int val, size_t tick) : x(x), y(y), val(val), creat_tick(tick)
     {
-        map.setZeroRect(x, y, 1, 1);
-        map.creat();
+        setZeroRect(x, y, 1, 1);
+        creat();
     }
 
     int life(int tick) { return c_time_goodslife - (tick - creat_tick); }
-    DisMap& getMap() { return map; }
+    
+    int x, y, val;
 
 private:
 
-    int x, y, val;
     int creat_tick;
-
-    DisMap map;
 
 };
 

@@ -4,87 +4,45 @@
 #include <iostream>
 #include <fstream>
 
-
-#include "constList.hpp"
 #include "classCommand.hpp"
-#include "classMap.hpp"
-#include "classBerth.hpp"
-#include "classBoat.hpp"
-#include "classGoods.hpp"
 
 #include "classRobot.hpp"
+#include "classBoat.hpp"
+#include "classBerth.hpp"
+#include "classGoods.hpp"
+
+#include "classSystem.hpp"
+
+#include "sdk.hpp"
 
 using namespace std;
-
-Berth berth[c_berth_num + 10];
-Boat boat[10];
-vector<Robot> robot;
-vector<Goods> goods;
 
 int money;
 
 void Init()
 {
-    int tmp[10]; char ch[210];
-    //////////////////////////////////////////////////
     // load map info
     for (size_t i = 0; i < c_size; ++ i)
-        cin >> map.ch[i];
+        cin >> DisMap::ch[i];
 
     // load berth info
     for (size_t i = 0; i < c_berth_num; ++ i)
     {
-        int id;
-        cin >> id;
-        cin >> berth[id].x >> berth[id].y >> berth[id].transport_time >> berth[id].loading_speed;
+        int id, x, y, trans_time, loading_speed;
+        cin >> id >> x >> y >> trans_time >> loading_speed;
+        System::berth.emplace_back(x, y, trans_time, loading_speed);
     }
 
     // load boat info
+    System::boat.resize(c_boat_num);
     cin >> Boat::boat_capacity;
 
     // init robot info
-    robot.resize(c_robot_num);
+    System::robot.resize(c_robot_num);
     for (size_t i = 0; i < c_robot_num; ++ i)
-        robot[i].id = i;
-    //////////////////////////////////////////////////
-    queue<pair<int, int> > que;
-    for (size_t i = 0; i < c_berth_num; ++ i)
-    {
-        while (!que.empty()) que.pop();
-        for (int dx = 0; dx < 4; ++ dx)
-        for (int dy = 0; dy < 4; ++ dy)
-        {
-            berth[i].dis[berth[i].x + dx][berth[i].y + dy] = 0;
-            que.push(make_pair<int, int>(berth[i].x + dx, berth[i].y + dy));
-        }
+        System::robot[i].id = i;
 
-        while (!que.empty())
-        {
-            auto [x, y] = que.front(); que.pop();
-            for (int j = 0; j < 4; ++ j)
-            {
-                int dx = x + c_dir[j][0], dy = y + c_dir[j][1];
-                if (!map.walkable(dx, dy)) continue;
-                if (berth[i].dis[dx][dy] > berth[i].dis[x][y] + 1)
-                {
-                    berth[i].dis[dx][dy] = berth[i].dis[x][y] + 1;
-                    que.push(make_pair<int, int>(0 + dx, 0 + dy));
-                }
-            }
-        }
-
-        // for (size_t x = 0; x < c_size; ++ x)
-        // for (size_t y = 0; y < c_size; ++ y)
-        //     cerr << ((berth[i].dis[x][y] == INT_MAX) ? -1 : berth[i].dis[x][y]) << ((y == c_size - 1) ? '\n' : '\t');
-    }
-
-    // for (int x = 0; x < c_size; ++ x)
-    // for (int y = 0; y < c_size; ++ y)
-    {
-
-    }
-    //////////////////////////////////////////////////
-    // finish message
+    // finish sign
     char okk[100]; cin >> okk;
     cout << "OK\n";
     fflush(stdout);
@@ -92,17 +50,16 @@ void Init()
 
 size_t Input()
 {
-    size_t id;
-    cin >> id >> money;
+    size_t tick;
+    cin >> tick >> money;
 
     // load goods info
-    size_t num;
-    cin >> num;
+    size_t num; cin >> num;
     for (size_t i = 1; i <= num; ++ i)
     {
         int x, y, val;
         cin >> x >> y >> val;
-        goods.emplace_back(x, y, val);
+        System::goods.emplace_back(x, y, val, tick);
     }
 
     // load robot info
@@ -112,10 +69,10 @@ size_t Input()
         cin >> goods >> x >> y >> status;
         // if (robot[i].x != x or robot[i].y != y)
         //     cerr << i << "  " << x << " , " << y << "   local: " << robot[i].x << " , " << robot[i].y << "\n";
-        robot[i].x = x;
-        robot[i].y = y;
-        robot[i].goods = goods;
-        robot[i].status = status;
+        // System::robot[i].x = x;
+        // System::robot[i].y = y;
+        // System::robot[i].goods = goods;
+        // System::robot[i].status = status;
     }
 
     // load boat info
@@ -123,58 +80,58 @@ size_t Input()
     {
         int status, pos;
         cin >> status >> pos;
-        if (boat[i].status != status or boat[i].pos != pos)
-        {
-            boat[i].status = static_cast<Boat::Status>(status);
-            boat[i].pos = pos;
-            // cerr << id << " " << boat[i].status << " " << boat[i].pos << "\n";
-        }
+        // if (boat[i].status != status or boat[i].pos != pos)
+        //     cerr << id << " " << boat[i].status << " " << boat[i].pos << "\n";
+        // System::boat[i].status = static_cast<Boat::Status>(status);
+        // System::boat[i].pos = pos;
     }
 
     // finish message
     char okk[100]; cin >> okk;
-    return id;
+    return tick;
 }
 
 void solve(int tick)
 {
-    // cerr << "sovle " << tick << "\n";
-    Command::clear();
-
     if (tick == 1)
     {
         for (size_t i = 0; i < c_boat_num; ++ i)
             Command::ship(i, i);
         for (size_t i = 0; i < c_robot_num; ++ i)
-            robot[i].setPull(berth[i], 0);
+            System::robot[i].setTarget(System::berth[i]);
     }
 
-    for (auto &it : robot)
-        it.step(robot);
+    for (auto &it : System::robot)
+        it.step(System::robot);
 
-    Command::print();
+    for (auto it = System::goods.begin(); it != System::goods.end();)
+        if ((*it).life(System::tick) <= 0)
+            System::goods.erase(it);
+        else
+            ++ it;
+
+    // clog << "goods_cnt = " << System::goods.size() << "\n";
+
 }
 
 int main()
 {
 
-    // ofstream file("_log.txt");
-    // streambuf *err = cerr.rdbuf(file.rdbuf());
+    ofstream file("_log.txt");
+    streambuf *err = cerr.rdbuf(file.rdbuf());
 
-    // solve(0);
-
+    // sdk_Init();
     Init();
     
-    for (size_t tick = 1; tick <= 15000; tick ++)
+    // while (System::tick < 15000)
+    for (int i = 1; i <= 15000; ++ i)
     {
-        Input();
+        // sdk_Input();
+        System::tick = Input();
 
-        // for (size_t i = 0; i < c_robot_num; ++ i)
-        //     cout << "move " << i << " " << rand() % 4 << "\n";
-        // cout << "OK\n";
-        // fflush(stdout);
-
-        solve(tick);
+        Command::clear();
+        solve(System::tick);
+        Command::print();
     }
 
     return 0;

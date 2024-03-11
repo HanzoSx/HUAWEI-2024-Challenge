@@ -1,9 +1,13 @@
 #ifndef CLASS_BOAT_H
 #define CLASS_BOAT_H
 
-struct Boat
+class Boat
 {
-    Boat() : num(0), pos(-1), status(done) {}
+public:
+
+    Boat();
+
+    static int boat_capacity;
 
     int num, pos;
     enum Status
@@ -13,8 +17,8 @@ struct Boat
         wait
     }   status;
 
-    static int boat_capacity;
+    int goods;
+
 };
-int Boat::boat_capacity = 0;
 
 #endif
