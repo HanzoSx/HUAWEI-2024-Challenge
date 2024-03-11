@@ -8,6 +8,8 @@ class System;
 
 class DisMap;
 
+class Goods;
+
 class Robot
 {
 public:
@@ -22,10 +24,12 @@ public:
     void step(std::vector<Robot> &robot);
 
     DisMap *map;
+    Goods *ptrgoods;
+
 
     int id, x, y;
     int goods, status;
-
+ 
 private:
 
     std::string info();

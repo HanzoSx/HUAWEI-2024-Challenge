@@ -15,6 +15,7 @@ public:
 
     int x, y;
     int trans_time, load_speed;
+    int factor; 
 
     std::queue<int> goods;
 

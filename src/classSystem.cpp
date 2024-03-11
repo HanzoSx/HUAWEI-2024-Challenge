@@ -78,7 +78,7 @@ size_t System::Input()
     {
         int x, y, val;
         std::cin >> x >> y >> val;
-        // System::goods.emplace_back(x, y, val, tick);
+        System::goods.emplace_back(x, y, val, tick);
     }
 
     // load robot info

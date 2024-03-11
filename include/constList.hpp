@@ -14,4 +14,8 @@ const int c_time_goodslife = 1000;
 
 const int N = c_size + 10;
 
+
+
+
+const int c_berth_dis_range = 20;
 #endif
