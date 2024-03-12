@@ -194,8 +194,11 @@ bool System::getGoods(int x, int y)
 bool System::pullGoods(int x, int y)
 {
     for (auto &it : berth)
-        if ( it.x <= x and x < it.x + 4 and 
-             it.y <= y and y < it.y + 4 )
-            return true;
+        if (it.x <= x and x < it.x + 4 and 
+            it.y <= y and y < it.y + 4)
+            {
+                it.goods.push(1);
+                return true;
+            }
     return false;
 }

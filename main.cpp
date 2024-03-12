@@ -60,8 +60,7 @@ void CalcRobotTarget()
             double tmp_func = 0;
             for (auto &target : System::goods)
             {
-                if (target.tag_select and
-                    (it.ptrgoods == nullptr or &target != it.ptrgoods)) continue;
+                if (target.tag_select and &target != it.ptrgoods) continue;
                 double now = function(target.dis[it.x][it.y], target.factor.hp, target.factor.val, target.factor.dis, target.factor.ber_val);
                 if (tmp == nullptr and target.dis[it.x][it.y] != INT_MAX or now > tmp_func)
                 {
@@ -169,8 +168,8 @@ int main()
     return 0;
     */
 
-    std::ifstream file("input.txt");
-    std::cin.rdbuf(file.rdbuf());
+    // std::ifstream file("input.txt");
+    // std::cin.rdbuf(file.rdbuf());
 
     // sdk_Init();
     System::Init();
