@@ -17,7 +17,7 @@ void Boat::go(int target)
     {
         Command::ship(id, target);
     }
-    status = Status::moving;
-    pos = target;
+    // status = Status::moving;
+    // pos = target;
     return;
 }

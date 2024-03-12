@@ -16,7 +16,7 @@ void CalcBerthFactor()
         it.factor = 0;
         for (auto &target : System::goods)
             if (it.dis[target.x][target.y] <= c_berth_dis_range)
-                it.factor++;
+                it.factor ++;
     }
 }
 
@@ -49,10 +49,10 @@ void CalcRobotTarget()
 {
     for (auto &it : System::robot)
     {
-        if (it.map->dis[it.x][it.y] == 0)
+        if (it.map != nullptr and it.map->dis[it.x][it.y] == 0)
         {
             if (it.goods == 0) it.get();
-            else it.pull();
+                else it.pull();
         }
         if (!it.goods)
         {
@@ -62,7 +62,7 @@ void CalcRobotTarget()
             {
                 if (target.tag_select) continue;
                 double now = function(target.dis[it.x][it.y], target.factor.hp, target.factor.val, target.factor.dis, target.factor.ber_val);
-                if (tmp == nullptr and target.dis[it.x][it.y] != INT_MAX or now < tmp_func)
+                if (tmp == nullptr and target.dis[it.x][it.y] != INT_MAX or now > tmp_func)
                 {
                     tmp = &target;
                     tmp_func = now;
@@ -70,7 +70,8 @@ void CalcRobotTarget()
             }
             if (tmp != nullptr)
             {
-                it.ptrgoods->tag_select = false;
+                if (it.ptrgoods != nullptr)
+                    it.ptrgoods->tag_select = false;
                 it.setTarget(*tmp);
                 it.ptrgoods = tmp;
                 tmp->tag_select = true;
@@ -85,7 +86,8 @@ void CalcRobotTarget()
             Berth *tmp = nullptr;
             for (auto &target : System::berth)
             {
-                if (tmp->dis[it.x][it.y] > target.dis[it.x][it.y])
+                if (tmp == nullptr and target.dis[it.x][it.y] or
+                    tmp != nullptr and tmp->dis[it.x][it.y] > target.dis[it.x][it.y])
                 {
                     tmp = &target;
                 }
@@ -93,6 +95,7 @@ void CalcRobotTarget()
             if (tmp != nullptr)
             {
                 it.setTarget(*tmp);
+                it.ptrgoods = nullptr;
             }
             // else
             // {
@@ -131,8 +134,8 @@ void solve(int tick)
 {
     if (tick == 1)
     {
-        for (size_t i = 0; i < c_boat_num; ++ i)
-            Command::ship(i, i);
+        // for (size_t i = 0; i < c_boat_num; ++ i)
+        //     Command::ship(i, i);
         // for (size_t i = 0; i < c_robot_num; ++ i)
         //     System::robot[i].setTarget(System::berth[i]);
     }
@@ -164,9 +167,9 @@ int main()
     }
     return 0;
     */
-    // std::ifstream file("input.txt");
-    // std::cin.rdbuf(file.rdbuf());
 
+    std::ifstream file("input.txt");
+    std::cin.rdbuf(file.rdbuf());
 
     // sdk_Init();
     System::Init();

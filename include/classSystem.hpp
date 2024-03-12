@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <list>
 #include <fstream>
 
 #include "classRobot.hpp"
@@ -17,7 +18,7 @@ public:
     static std::vector<Robot> robot;
     static std::vector<Boat> boat;
     static std::vector<Berth> berth;
-    static std::vector<Goods> goods;
+    static std::list<Goods> goods;
 
     static int tick, money;
     

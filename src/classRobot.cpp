@@ -8,7 +8,15 @@
 #include "classMap.hpp"
 #include "classSystem.hpp"
 
- Robot::Robot() : id(0), x(0), y(0), goods(0), status(0), map(nullptr) {}
+ Robot::Robot() :
+ id      (0),
+ x       (0),
+ y       (0),
+ goods   (0),
+ status  (0),
+ map     (nullptr),
+ ptrgoods(nullptr)
+ {}
 
 void Robot::move(int direction)
 {

@@ -1,12 +1,11 @@
 #include "classSystem.hpp"
 
 #include <iostream>
-#include <fstream>
 
 std::vector<Robot> System::robot;
 std::vector<Boat> System::boat;
 std::vector<Berth> System::berth;
-std::vector<Goods> System::goods;
+std::list<Goods> System::goods;
 
 int System::tick = 0;
 int System::money = 0;
@@ -63,6 +62,9 @@ size_t System::Input()
     int _tick, _money;
     std::cin >> _tick >> _money;
 
+    if (_tick == 1057)
+        System::money = 0;
+
     if (_tick != System::tick + 1)
         System::log("ERR", "Tick " + std::to_string(System::tick) + " -> " + std::to_string(_tick));
     System::tick = _tick;
@@ -73,13 +75,16 @@ size_t System::Input()
     System::money = _money;
 
     // load goods info
+    static int total_goods = 0;
     size_t num; std::cin >> num;
     for (size_t i = 1; i <= num; ++ i)
     {
         int x, y, val;
         std::cin >> x >> y >> val;
         System::goods.emplace_back(x, y, val, tick);
+        total_goods ++;
     }
+        std::cout << total_goods << " " << goods.size() << "\n";
 
     // load robot info
     for (size_t i = 0; i < c_robot_num; ++ i)
@@ -117,10 +122,24 @@ void System::Update_front()
 {
     // goods disappear
     for (auto it = System::goods.begin(); it != System::goods.end();)
-        if ((*it).life(System::tick) <= 0)
-            System::goods.erase(it);
-        else
-            ++ it;
+    {
+        auto _it = it;
+        ++ it;
+        if (_it->life(System::tick) <= 0)
+        {
+            if (_it->tag_select)
+            {
+                for (auto &robot : System::robot)
+                    if (&(*_it) == robot.ptrgoods)
+                    {
+                        robot.map = nullptr;
+                        robot.ptrgoods = nullptr;
+                    }
+            }
+            System::goods.erase(_it);
+        }
+    }
+    // System::goods.remove_if([](Goods g){return g.life(System::tick) <= 0;});
 
     // ship update
     for (auto &it : System::boat)

@@ -9,7 +9,7 @@ class Goods : public DisMap
 {
 public:
 
-    Goods(int x, int y, int val, size_t tick) : x(x), y(y), val(val), creat_tick(tick), tag_select(false)
+    Goods(int x, int y, int val, size_t tick) : DisMap(), x(x), y(y), val(val), creat_tick(tick), tag_select(false)
     {
         setZeroRect(x, y, 1, 1);
         creat();
