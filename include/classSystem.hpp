@@ -30,14 +30,19 @@ public:
     static void Update_front();
     static void Update_back();
 
-    static const bool __OUTPUT_LOG__ = false;
+    static const bool __OUTPUT_LOG__ = true;
     static const bool __OUTPUT_ERR__ = true;
-    static const bool __OUTPUT_INFO__ = true;
+    static const bool __OUTPUT_INFO__ = false;
     static void log(std::string type, std::string log);
 
-    static bool getGoods(int x, int y);
-    static bool pullGoods(int x, int y);
+    static int getGoods(int x, int y);
+    static bool pullGoods(int x, int y, int val);
 
+    static int pull_sum;
+    static int pull_value_sum;
+
+    static int boat_trans_goods;
+    static int boat_trans_val;
 
 };
 

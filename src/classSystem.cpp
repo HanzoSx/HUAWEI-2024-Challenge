@@ -92,13 +92,12 @@ size_t System::Input()
         int goods, x, y, status;
         std::cin >> goods >> x >> y >> status;
 
-        if (robot[i].x != x or robot[i].y != y or robot[i].goods != goods)
+        if (robot[i].x != x or robot[i].y != y or (bool)robot[i].goods != (bool)goods)
             System::log("ERR", robot[i].info() + "Out of sync || Current : [" + 
                     std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(goods) + "]");
 
         System::robot[i].x = x;
         System::robot[i].y = y;
-        System::robot[i].goods = goods;
         System::robot[i].status = status;
     }
 
@@ -145,7 +144,9 @@ void System::Update_front()
     for (auto &it : System::boat)
         if (it.status == Boat::Status::done and it.pos == -1)
         {
-            it.goods = 0;
+            System::boat_trans_goods += it.goods;
+            System::boat_trans_val += it.goods_val;
+            it.goods = it.goods_val = 0;
         }
 }
 
@@ -159,9 +160,9 @@ void System::Update_back()
                 if (System::berth[it.pos].goods.empty() or it.goods >= Boat::boat_capacity)
                     break;
                 it.goods ++;
+                it.goods_val += System::berth[it.pos].goods.front();
                 System::berth[it.pos].goods.pop();
-            }
-            
+            } 
 }
 
 void System::log(std::string type, std::string log)
@@ -180,25 +181,35 @@ void System::log(std::string type, std::string log)
 }
 
 
-bool System::getGoods(int x, int y)
+int System::getGoods(int x, int y)
 {
     for (auto it = goods.begin(); it != goods.end(); ++ it)
         if (it->x == x and it->y == y)
         {
+            int val = it->val;
             goods.erase(it);
-            return true;
+            return val;
         }
-    return false;
+    return 0;
 }
 
-bool System::pullGoods(int x, int y)
+bool System::pullGoods(int x, int y, int val)
 {
     for (auto &it : berth)
         if (it.x <= x and x < it.x + 4 and 
             it.y <= y and y < it.y + 4)
             {
-                it.goods.push(1);
+                it.goods.push(val);
+                System::pull_sum ++;
+                System::pull_value_sum += val;
                 return true;
             }
     return false;
 }
+
+int System::pull_sum = 0;
+int System::pull_value_sum = 0;
+
+
+int System::boat_trans_goods = 0;
+int System::boat_trans_val = 0;

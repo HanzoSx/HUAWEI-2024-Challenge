@@ -2,7 +2,7 @@
 
 #include "classCommand.hpp"
 
-Boat::Boat() : pos(-1), status(done) {}
+Boat::Boat() : pos(-1), status(done), goods(0), goods_val(0) {}
 
 int Boat::boat_capacity = 0;
 

@@ -40,10 +40,11 @@ void Robot::get()
     }
 
     Command::get(id);
-    if (System::getGoods(x, y))
+    if (int val = System::getGoods(x, y))
     {
-        goods = 1;
+        goods = val;
         map = nullptr;
+        ptrgoods = nullptr;
         System::log("INFO", info() + "get");
     }
     else
@@ -59,7 +60,7 @@ void Robot::pull()
     }
 
     Command::pull(id);
-    if (System::pullGoods(x, y))
+    if (System::pullGoods(x, y, goods))
     {
         goods = 0;
         System::log("INFO", info() + "pull");

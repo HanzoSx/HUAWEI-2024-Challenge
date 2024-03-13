@@ -19,7 +19,7 @@ public:
         wait
     }   status;
 
-    int goods;
+    int goods, goods_val;
 
 };
 
