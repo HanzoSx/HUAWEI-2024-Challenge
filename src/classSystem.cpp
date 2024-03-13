@@ -12,6 +12,8 @@ int System::money = 0;
 
 std::ofstream System::log_file;
 
+int System::nearest[N][N];
+
 void System::Init()
 {
     if (__OUTPUT_LOG__)
@@ -39,6 +41,25 @@ void System::Init()
         // }
     }
 
+    for (int x = 0; x < c_size; ++ x)
+    for (int y = 0; y < c_size; ++ y)
+    {
+        System::nearest[x][y] = 0;
+        for (int i = 0; i < c_berth_num; ++ i)
+            if (System::berth[i].dis[x][y] < System::berth[System::nearest[x][y]].dis[x][y])
+                System::nearest[x][y] = i;
+
+        if (System::berth[System::nearest[x][y]].dis[x][y] == INT_MAX)
+            System::nearest[x][y] = -1;
+    }
+    
+    for (int x = 0; x < c_size; ++ x)
+    for (int y = 0; y < c_size; ++ y)
+    {
+        int d = System::nearest[x][y];
+        std::cerr << ((d == -1) ? "-" : std::to_string(d)) << ((y == c_size - 1) ? "\n" : " ");
+    }
+
     // load boat info
     System::boat.resize(c_boat_num);
     for (size_t i = 0; i < c_boat_num; ++ i)
@@ -60,9 +81,6 @@ size_t System::Input()
 {
     int _tick, _money;
     std::cin >> _tick >> _money;
-
-    if (_tick == 1057)
-        System::money = 0;
 
     if (_tick != System::tick + 1)
         System::log("ERR", "Tick " + std::to_string(System::tick) + " -> " + std::to_string(_tick));

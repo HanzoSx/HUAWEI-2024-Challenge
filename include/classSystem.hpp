@@ -24,6 +24,8 @@ public:
     
     static std::ofstream log_file;
 
+    static int nearest[N][N];
+
     static void Init();
     static size_t Input();
 
