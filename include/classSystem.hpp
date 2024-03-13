@@ -44,6 +44,9 @@ public:
     static int boat_trans_goods;
     static int boat_trans_val;
 
+    static int goods_sum;
+    static int goods_val;
+
 };
 
 #endif

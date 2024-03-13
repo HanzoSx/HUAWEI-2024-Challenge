@@ -29,7 +29,6 @@ void System::Init()
     {
         int id, x, y, trans_time, loading_speed;
         std::cin >> id >> x >> y >> trans_time >> loading_speed;
-        // cerr << id << x << y << trans_time << loading_speed;
         System::berth.emplace_back(x, y, trans_time, loading_speed);
 
         // for (int x = 0; x < c_size; ++ x)
@@ -75,16 +74,15 @@ size_t System::Input()
     System::money = _money;
 
     // load goods info
-    static int total_goods = 0;
     size_t num; std::cin >> num;
     for (size_t i = 1; i <= num; ++ i)
     {
         int x, y, val;
         std::cin >> x >> y >> val;
         System::goods.emplace_back(x, y, val, tick);
-        total_goods ++;
+        System::goods_sum ++;
+        System::goods_val += val;
     }
-        std::cout << total_goods << " " << goods.size() << "\n";
 
     // load robot info
     for (size_t i = 0; i < c_robot_num; ++ i)
@@ -213,3 +211,7 @@ int System::pull_value_sum = 0;
 
 int System::boat_trans_goods = 0;
 int System::boat_trans_val = 0;
+
+
+int System::goods_sum = 0;
+int System::goods_val = 0;

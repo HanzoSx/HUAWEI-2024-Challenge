@@ -8,7 +8,9 @@
 [    1/ERR ] Robot 7[0, 0, 0] Out of sync || Current : [136, 72, 0]
 [    1/ERR ] Robot 8[0, 0, 0] Out of sync || Current : [167, 122, 0]
 [    1/ERR ] Robot 9[0, 0, 0] Out of sync || Current : [167, 173, 0]
-[15000/IMP] Robot Pull = 1515
-[15000/IMP] Robot Pull Value = 282414
-[15000/IMP] Boat Trans = 1205
-[15000/IMP] Boat Trans Value = 223794
+[15000/IMP ] Robot Pull = 1464
+[15000/IMP ] Robot Pull Value = 279108
+[15000/IMP ] Boat Trans = 1166
+[15000/IMP ] Boat Trans Value = 222122
+[15000/IMP ] Goods Sum = 2541
+[15000/IMP ] Goods Val = 440491

@@ -40,8 +40,11 @@ double solve1_function(int disRG, int hp, int val, int disGB, int ber_val)
 {
     {
         if (hp + 10 < disRG) return -INT_MAX;
+        if (val < 100) return -INT_MAX;
         int dis = disRG + disGB;
-        return val / dis + exp(-0.002*hp) * 2;
+        // return -dis;
+        return val / dis;
+        return exp(-0.002*hp) * 2 + val / dis;
     }
     {
         double e[5] = {-1, -1, 1, -1, 1};

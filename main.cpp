@@ -30,10 +30,12 @@ int main()
         System::Update_back();
     }
 
-    System::log("IMP", "Robot Pull = " + std::to_string(System::pull_sum));
-    System::log("IMP", "Robot Pull Value = " + std::to_string(System::pull_value_sum));
-    System::log("IMP", "Boat Trans = " + std::to_string(System::boat_trans_goods));
-    System::log("IMP", "Boat Trans Value = " + std::to_string(System::boat_trans_val));
+    System::log("IMP ", "Robot Pull = " + std::to_string(System::pull_sum));
+    System::log("IMP ", "Robot Pull Value = " + std::to_string(System::pull_value_sum));
+    System::log("IMP ", "Boat Trans = " + std::to_string(System::boat_trans_goods));
+    System::log("IMP ", "Boat Trans Value = " + std::to_string(System::boat_trans_val));
+    System::log("IMP ", "Goods Sum = " + std::to_string(System::goods_sum));
+    System::log("IMP ", "Goods Val = " + std::to_string(System::goods_val));
 
     return 0;
 }
