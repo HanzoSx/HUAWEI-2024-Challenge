@@ -32,6 +32,7 @@ void System::Init()
         int id, x, y, trans_time, loading_speed;
         std::cin >> id >> x >> y >> trans_time >> loading_speed;
         System::berth.emplace_back(x, y, trans_time, loading_speed);
+        System::berth.back().id = i;
 
         // for (int x = 0; x < c_size; ++ x)
         // for (int y = 0; y < c_size; ++ y)

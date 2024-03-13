@@ -2,7 +2,6 @@
 #define CLASS_GOODS_H
 
 #include "constList.hpp"
-
 #include "classMap.hpp"
 
 class Goods : public DisMap

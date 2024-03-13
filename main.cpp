@@ -4,7 +4,7 @@
 // #include "sdk.hpp"
 
 #include "solve1.hpp"
-
+#include "solve2.hpp"
 
 
 int main()

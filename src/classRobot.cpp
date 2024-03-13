@@ -15,7 +15,8 @@
  goods   (0),
  status  (0),
  map     (nullptr),
- ptrgoods(nullptr)
+ ptrgoods(nullptr),
+ ptrBerth(nullptr)
  {}
 
 void Robot::move(int direction)
@@ -79,9 +80,10 @@ void Robot::step(vector<Robot> &robot)
 {
     if (map == nullptr or map->dis[x][y] == 0) return;
 
-    int tmpDir = -1, tmpDis = INT_MAX;
-    for (int i = 0; i < 4; ++ i)
+    int tmpDir = -1, tmpDis = INT_MAX, perturbation = x + y;
+    for (int _i = 0; _i < 4; ++ _i)
     {
+        int i = (_i + perturbation) % 4;
         int dx = x + c_dir[i][0], dy = y + c_dir[i][1];
 
         bool f = true;

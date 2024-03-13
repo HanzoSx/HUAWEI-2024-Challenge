@@ -9,6 +9,7 @@ class System;
 class DisMap;
 
 class Goods;
+class Berth;
 
 class Robot
 {
@@ -30,6 +31,9 @@ public:
 
     // solve1
     Goods *ptrgoods;
+
+    // solve2
+    Berth *ptrBerth;
  
 private:
 
