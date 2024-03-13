@@ -53,12 +53,12 @@ void System::Init()
             System::nearest[x][y] = -1;
     }
     
-    for (int x = 0; x < c_size; ++ x)
-    for (int y = 0; y < c_size; ++ y)
-    {
-        int d = System::nearest[x][y];
-        std::cerr << ((d == -1) ? "-" : std::to_string(d)) << ((y == c_size - 1) ? "\n" : " ");
-    }
+    // for (int x = 0; x < c_size; ++ x)
+    // for (int y = 0; y < c_size; ++ y)
+    // {
+    //     int d = System::nearest[x][y];
+    //     std::cerr << ((d == -1) ? "-" : std::to_string(d)) << ((y == c_size - 1) ? "\n" : " ");
+    // }
 
     // load boat info
     System::boat.resize(c_boat_num);

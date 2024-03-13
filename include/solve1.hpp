@@ -43,7 +43,7 @@ double solve1_function(int disRG, int hp, int val, int disGB, int ber_val)
         if (val < 100) return -INT_MAX;
         int dis = disRG + disGB;
         // return -dis;
-        return val / dis;
+        // return val / dis;
         return exp(-0.002*hp) * 2 + val / dis;
     }
     {
