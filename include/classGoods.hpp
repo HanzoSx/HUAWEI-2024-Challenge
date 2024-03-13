@@ -16,9 +16,11 @@ public:
     }
 
     int life(int tick) { return c_time_goodslife - (tick - creat_tick); }
-    
+
+    // system    
     int x, y, val;
 
+    // solve1
     struct Factor{
         int hp , val, dis, ber_val;
     }   factor;

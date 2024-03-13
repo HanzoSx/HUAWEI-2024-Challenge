@@ -3,8 +3,10 @@
 #include "classCommand.hpp"
 #include "classSystem.hpp"
 
+const int c_berth_dis_range = 20;
 
-void CalcBerthFactor()
+
+void solve1_CalcBerthFactor()
 {
     for (auto &it : System::berth)
     {
@@ -15,7 +17,7 @@ void CalcBerthFactor()
     }
 }
 
-void CalcGoodsFactor(int tick)
+void solve1_CalcGoodsFactor(int tick)
 {
     for (auto &it : System::goods)
     {
@@ -34,7 +36,7 @@ void CalcGoodsFactor(int tick)
 }
 
 
-double function(int disRG, int hp, int val, int disGB, int ber_val)
+double solve1_function(int disRG, int hp, int val, int disGB, int ber_val)
 {
     {
         if (hp + 10 < disRG) return -INT_MAX;
@@ -47,7 +49,7 @@ double function(int disRG, int hp, int val, int disGB, int ber_val)
     }
 }
 
-void CalcRobotTarget()
+void solve1_CalcRobotTarget()
 {
     for (auto &it : System::robot)
     {
@@ -63,7 +65,7 @@ void CalcRobotTarget()
             for (auto &target : System::goods)
             {
                 if (target.tag_select and &target != it.ptrgoods) continue;
-                double now = function(target.dis[it.x][it.y], target.factor.hp, target.factor.val, target.factor.dis, target.factor.ber_val);
+                double now = solve1_function(target.dis[it.x][it.y], target.factor.hp, target.factor.val, target.factor.dis, target.factor.ber_val);
                 if (tmp == nullptr and target.dis[it.x][it.y] != INT_MAX or now > tmp_func)
                 {
                     tmp = &target;
@@ -108,7 +110,7 @@ void CalcRobotTarget()
     }
 }
 
-void DoBoat(int tick)
+void solve1_DoBoat(int tick)
 {
     for (int i = 0; i < c_boat_num ; ++ i)
     {
@@ -140,21 +142,13 @@ void DoBoat(int tick)
 
 void solve1(int tick)
 {
-    if (tick == 1)
-    {
-        // for (size_t i = 0; i < c_boat_num; ++ i)
-        //     Command::ship(i, i);
-        // for (size_t i = 0; i < c_robot_num; ++ i)
-        //     System::robot[i].setTarget(System::berth[i]);
-    }
 
     for (auto &it : System::robot)
         it.step(System::robot);
 
-    CalcBerthFactor();
-    CalcGoodsFactor(tick);
-    CalcRobotTarget();
-    DoBoat(tick);
-    // clog << "goods_cnt = " << System::goods.size() << "\n";
+    solve1_CalcBerthFactor();
+    solve1_CalcGoodsFactor(tick);
+    solve1_CalcRobotTarget();
+    solve1_DoBoat(tick);
 
 }

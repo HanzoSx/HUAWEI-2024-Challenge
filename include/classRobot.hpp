@@ -23,12 +23,13 @@ public:
     void setTarget(DisMap &map);
     void step(std::vector<Robot> &robot);
 
+    // system
     DisMap *map;
-    Goods *ptrgoods;
-
-
     int id, x, y;
     int goods, status;
+
+    // solve1
+    Goods *ptrgoods;
  
 private:
 
