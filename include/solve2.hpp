@@ -1,50 +1,70 @@
 #include <math.h>
 #include <cstring>
+#include <vector>
 
 #include "classCommand.hpp"
 #include "classSystem.hpp"
 
+int solve2_Single01Problem(
+    int n,
+    std::vector<int> &val,
+    std::vector<int> &t,
+    std::vector<int> &firstt,
+    std::vector<int> &ddl,
+    int &finish,
+    std::vector<int> &solsol
+    )
+{
+    std::vector<int> dp(0, c_time_goodslife);
+    std::vector<bool> first(c_time_goodslife);
+    
+}
 
-int solve2_calcBerthValue(Berth &berth, std::vector<Robot*> &robot, std::vector<Goods*> &goods, std::vector<Goods*> &solution, int tick)
+int solve2_calcBerthValue(
+    int tick,
+    Berth &berth,
+    std::vector<Robot*> &robot,
+    std::vector<Goods*> &goods,
+    std::vector<Goods*> &solution)
 {
     int c_reserve_time = 5;
     solution.clear();
 
-    int dp[c_time_goodslife + 100];
-    Goods* sol[c_time_goodslife + 100];
-    bool first[c_time_goodslife + 100];
-    for (auto &it : robot)
-    {
-        solution.push_back(nullptr);
-        memset(dp, 0, sizeof dp);
-        memset(sol, 0, sizeof sol);
-        memset(first, false, sizeof first);
+    // int dp[c_time_goodslife + 100];
+    // Goods* sol[c_time_goodslife + 100];
+    // bool first[c_time_goodslife + 100];
+    // for (auto &it : robot)
+    // {
+    //     solution.push_back(nullptr);
+    //     memset(dp, 0, sizeof dp);
+    //     memset(sol, 0, sizeof sol);
+    //     memset(first, false, sizeof first);
 
-        int start = 0;
-        if (it->goods) start = it->ptrBerth->dis[it->x][it->y];
+    //     int start = 0;
+    //     if (it->goods) start = it->ptrBerth->dis[it->x][it->y];
 
-        for (auto &goods : goods)
-        {
-            if (goods->life(tick) - berth.dis[goods->x][goods->y] - c_reserve_time < start) continue;
+    //     for (auto &goods : goods)
+    //     {
+    //         if (goods->life(tick) - berth.dis[goods->x][goods->y] - c_reserve_time < start) continue;
 
-            for (int i = goods->life(tick) - berth.dis[goods->x][goods->y] - c_reserve_time; i > start; ++ i)
-                if (dp[i] < dp[i - berth.dis[goods->x][goods->y] * 2] + goods->val)
-                {
-                    dp[i] = dp[i - berth.dis[goods->x][goods->y] * 2] + goods->val;
-                    sol[i] = goods;
-                }
+    //         for (int i = goods->life(tick) - berth.dis[goods->x][goods->y] - c_reserve_time; i > start; ++ i)
+    //             if (dp[i] < dp[i - berth.dis[goods->x][goods->y] * 2] + goods->val)
+    //             {
+    //                 dp[i] = dp[i - berth.dis[goods->x][goods->y] * 2] + goods->val;
+    //                 sol[i] = goods;
+    //             }
 
-            int t = berth.dis[goods->x][goods->y] + goods->dis[it->x][it->y];
-            if (dp[t + start] < dp[start] + goods->val)
-            {
-                dp[t + start] = goods->val;
-                sol[t + start] = goods;
-                first[t + start] = true;
-            }
-        }
+    //         int t = berth.dis[goods->x][goods->y] + goods->dis[it->x][it->y];
+    //         if (dp[t + start] < dp[start] + goods->val)
+    //         {
+    //             dp[t + start] = goods->val;
+    //             sol[t + start] = goods;
+    //             first[t + start] = true;
+    //         }
+    //     }
 
         
-    }
+    // }
 }
 
 void solve2_calcRobot(int tick)
@@ -64,7 +84,7 @@ void solve2_calcRobot(int tick)
 
     int currentValue[c_berth_num];
     for (int i = 0; i < c_berth_num; ++ i)
-        currentValue[i] = solve2_calcBerthValue(System::berth[i], ptrRobot[i], ptrGoods[i], tmpSol, tick);
+        currentValue[i] = solve2_calcBerthValue(tick, System::berth[i], ptrRobot[i], ptrGoods[i], tmpSol);
     
     for (auto &robot : System::robot)
     {
@@ -78,8 +98,8 @@ void solve2_calcRobot(int tick)
             tmpRobot_to = ptrRobot[berth.id];
             tmpRobot_to.push_back(&robot);
 
-            int tmpVal_from = solve2_calcBerthValue(berth, tmpRobot_from, ptrGoods[robot.ptrBerth->id], tmpSol, tick);
-            int tmpVal_to = solve2_calcBerthValue(berth, tmpRobot_to, ptrGoods[berth.id], tmpSol, tick);
+            int tmpVal_from = solve2_calcBerthValue(tick, berth, tmpRobot_from, ptrGoods[robot.ptrBerth->id], tmpSol);
+            int tmpVal_to = solve2_calcBerthValue(tick, berth, tmpRobot_to, ptrGoods[berth.id], tmpSol);
 
             if (currentValue[robot.ptrBerth->id] + currentValue[berth.id] < tmpVal_from + tmpVal_to)
             {
@@ -95,7 +115,7 @@ void solve2_calcRobot(int tick)
 
     for (int i = 0; i < c_berth_num; ++ i)
     {
-        solve2_calcBerthValue(System::berth[i], ptrRobot[i], ptrGoods[i], tmpSol, tick);
+        solve2_calcBerthValue(tick, System::berth[i], ptrRobot[i], ptrGoods[i], tmpSol);
         for (size_t j = 0; j < tmpSol.size(); ++ j)
             if (System::robot[j].goods)
                 System::robot[j].setTarget(*System::robot[j].ptrBerth);
