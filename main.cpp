@@ -10,8 +10,12 @@
 int main()
 {
 
-    // std::ifstream file("input.txt");
-    // std::cin.rdbuf(file.rdbuf());
+    std::ifstream file;
+    if (System::__DEBUG__)
+    {
+        file.open("input.txt");
+        std::cin.rdbuf(file.rdbuf());
+    }
 
     // sdk_Init();
     System::Init();
@@ -24,7 +28,7 @@ int main()
         System::Update_front();
 
         Command::clear();
-        solve1(System::tick);
+        solve2(System::tick);
         Command::print();
 
         System::Update_back();
