@@ -84,7 +84,10 @@ size_t System::Input()
     std::cin >> _tick >> _money;
 
     if (_tick != System::tick + 1)
+    {
         System::log("ERR", "Tick " + std::to_string(System::tick) + " -> " + std::to_string(_tick));
+        System::skip_ticks += _tick - System::tick - 1;
+    }
     System::tick = _tick;
 
     if (_money != System::money)
@@ -223,6 +226,10 @@ bool System::pullGoods(int x, int y, int val)
             }
     return false;
 }
+
+
+int System::skip_ticks = 0;
+
 
 int System::pull_sum = 0;
 int System::pull_value_sum = 0;

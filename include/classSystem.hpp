@@ -40,6 +40,8 @@ public:
     static int getGoods(int x, int y);
     static bool pullGoods(int x, int y, int val);
 
+    static int skip_ticks;
+
     static int pull_sum;
     static int pull_value_sum;
 
