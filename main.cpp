@@ -28,7 +28,7 @@ int main()
         System::Update_front();
 
         Command::clear();
-        solve2(System::tick);
+        solve1(System::tick);
         Command::print();
 
         System::Update_back();

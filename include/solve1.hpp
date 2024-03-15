@@ -40,15 +40,17 @@ double solve1_function(int disRG, int hp, int val, int disGB, int ber_val)
 {
     {
         if (hp + 10 < disRG) return -INT_MAX;
-        // if (val < 150) return -INT_MAX;
+        if (val < 150) return -INT_MAX;
         // int dis = disRG + disGB;
         // // return -dis;
         // // return val / dis;
         // return exp(-0.004*hp) * (double)val / (double)dis;
     }
     {
-        double e[5] = {1, 1, 1, 1, 1};
-        return e[0] / disRG + e[1] / hp + e[2] * val + e[3] / disGB + e[4] * ber_val;
+        // double e[5] = {-1, -1, 1, -1, 1};
+        // return e[0] * disRG + e[1] * hp + e[2] * val + e[3] * disGB + e[4] * ber_val;
+        double e[3] = {1, 200, 1};
+        return e[0] * val / (disRG + disGB) + e[1] / hp + e[2] * ber_val;
     }
 }
 
@@ -117,27 +119,26 @@ void solve1_DoBoat(int tick)
 {
     for (int i = 0; i < c_boat_num ; ++ i)
     {
-        if (System::boat[i].pos != -1)
-        {
-            if (System::berth[System::boat[i].pos].trans_time + 10 >= c_time_totaltick - tick)
-                System::boat[i].go(-1);
-        }
-
+        int left_time = (3000 - System::berth[i * 2].trans_time - System::berth[i * 2 + 1].trans_time - c_time_berth2b) / 2;
+        int choice = System::berth[i * 2].trans_time > System::berth[i * 2 + 1].trans_time? 0 : 1;
         if (System::boat[i].status != Boat::done) continue;
         if (System::boat[i].pos == -1)
         {
-            System::boat[i].go(i * 2);
+            System::boat[i].go(i * 2 + choice);
             continue; 
         }
-        if (System::boat[i].goods == Boat::boat_capacity)
+        int tmp = tick % 3000;
+        if (tmp == System::berth[i * 2 + choice].trans_time + left_time)
+        {
+            System::boat[i].go(i * 2 +  1 - choice);
+            continue; 
+        }
+        if (tmp == 3000 - System::berth[i * 2 + 1 - choice].trans_time)
         {
             System::boat[i].go(-1);
-            continue;
+            continue; 
         }
-        if (System::berth[System::boat[i].pos].goods.empty())
-        {
-            System::boat[i].go(System::boat[i].pos == i * 2 ? i * 2 + 1 : i * 2);
-        }
+
     }
 
     
