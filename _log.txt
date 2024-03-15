@@ -1,16 +1,50 @@
-[    1/ERR ] Robot 0[0, 0, 0] Out of sync || Current : [25, 79, 0]
-[    1/ERR ] Robot 1[0, 0, 0] Out of sync || Current : [25, 119, 0]
-[    1/ERR ] Robot 2[0, 0, 0] Out of sync || Current : [47, 153, 0]
-[    1/ERR ] Robot 3[0, 0, 0] Out of sync || Current : [69, 79, 0]
-[    1/ERR ] Robot 4[0, 0, 0] Out of sync || Current : [69, 119, 0]
-[    1/ERR ] Robot 5[0, 0, 0] Out of sync || Current : [130, 79, 0]
-[    1/ERR ] Robot 6[0, 0, 0] Out of sync || Current : [130, 119, 0]
-[    1/ERR ] Robot 7[0, 0, 0] Out of sync || Current : [152, 44, 0]
-[    1/ERR ] Robot 8[0, 0, 0] Out of sync || Current : [174, 79, 0]
-[    1/ERR ] Robot 9[0, 0, 0] Out of sync || Current : [174, 119, 0]
-[15000/IMP ] Robot Pull = 1766
-[15000/IMP ] Robot Pull Value = 335398
-[15000/IMP ] Boat Trans = 1500
-[15000/IMP ] Boat Trans Value = 284784
-[15000/IMP ] Goods Sum = 2491
-[15000/IMP ] Goods Val = 430867
+[    1/ERR ] Robot 0[0, 0, 0] Out of sync || Current : [26, 26, 0]
+[    1/ERR ] Robot 1[0, 0, 0] Out of sync || Current : [29, 63, 0]
+[    1/ERR ] Robot 2[0, 0, 0] Out of sync || Current : [85, 149, 0]
+[    1/ERR ] Robot 3[0, 0, 0] Out of sync || Current : [90, 32, 0]
+[    1/ERR ] Robot 4[0, 0, 0] Out of sync || Current : [116, 80, 0]
+[    1/ERR ] Robot 5[0, 0, 0] Out of sync || Current : [118, 29, 0]
+[    1/ERR ] Robot 6[0, 0, 0] Out of sync || Current : [130, 143, 0]
+[    1/ERR ] Robot 7[0, 0, 0] Out of sync || Current : [136, 72, 0]
+[    1/ERR ] Robot 8[0, 0, 0] Out of sync || Current : [167, 122, 0]
+[    1/ERR ] Robot 9[0, 0, 0] Out of sync || Current : [167, 173, 0]
+[    1/ERR ] Tick 1 -> 3
+[  140/ERR ] Tick 140 -> 142
+[ 1557/ERR ] Tick 1557 -> 1559
+[ 1593/ERR ] Tick 1593 -> 1595
+[ 1923/ERR ] Tick 1923 -> 1925
+[ 1995/ERR ] Tick 1995 -> 1997
+[ 2253/ERR ] Tick 2253 -> 2255
+[ 2291/ERR ] Tick 2291 -> 2294
+[ 2378/ERR ] Robot 5[82, 102, 0] can't move
+[ 2382/ERR ] Robot 2[82, 98, 0] can't move
+[ 2609/ERR ] Robot 2[82, 102, 0] can't move
+[ 4251/ERR ] Tick 4251 -> 4255
+[ 5752/ERR ] Tick 5752 -> 5754
+[ 5946/ERR ] Robot 2[66, 102, 0] can't move
+[ 6409/ERR ] Tick 6409 -> 6411
+[ 6533/ERR ] Tick 6533 -> 6535
+[ 6547/ERR ] Tick 6547 -> 6549
+[ 7178/ERR ] Tick 7178 -> 7180
+[ 7538/ERR ] Tick 7538 -> 7542
+[ 8752/ERR ] Robot 6[66, 102, 0] can't move
+[ 8955/ERR ] Tick 8955 -> 8958
+[ 9108/ERR ] Tick 9108 -> 9110
+[ 9140/ERR ] Tick 9140 -> 9142
+[ 9148/ERR ] Tick 9148 -> 9150
+[ 9914/ERR ] Tick 9914 -> 9916
+[10060/ERR ] Tick 10060 -> 10063
+[10863/ERR ] Tick 10863 -> 10866
+[10927/ERR ] Tick 10927 -> 10929
+[11250/ERR ] Tick 11250 -> 11252
+[11348/ERR ] Tick 11348 -> 11351
+[11857/ERR ] Tick 11857 -> 11859
+[12955/ERR ] Tick 12955 -> 12960
+[13646/ERR ] Tick 13646 -> 13648
+[13820/ERR ] Tick 13820 -> 13822
+[15000/IMP ] Robot Pull = 832
+[15000/IMP ] Robot Pull Value = 155531
+[15000/IMP ] Boat Trans = 694
+[15000/IMP ] Boat Trans Value = 129886
+[15000/IMP ] Goods Sum = 2433
+[15000/IMP ] Goods Val = 420728
