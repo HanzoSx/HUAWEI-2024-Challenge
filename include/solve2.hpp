@@ -226,8 +226,8 @@ void solve2(int tick)
     {
         for (auto &it : System::robot)
             if (System::nearest[it.x][it.y] >= 0)
-                // it.ptrBerth = &System::berth[System::nearest[it.x][it.y]];
-                it.ptrBerth = &System::berth[it.id];
+                it.ptrBerth = &System::berth[System::nearest[it.x][it.y]];
+                // it.ptrBerth = &System::berth[it.id];
     }
 
     if (tick == 1878)
