@@ -41,10 +41,9 @@ double solve1_function(int disRG, int hp, int val, int disGB, int ber_val)
     {
         if (hp + 10 < disRG) return -INT_MAX;
         if (val < 150) return -INT_MAX;
-        // int dis = disRG + disGB;
-        // // return -dis;
-        // // return val / dis;
-        // return exp(-0.004*hp) * (double)val / (double)dis;
+        int dis = disRG + disGB;
+        
+        return exp(-0.004*hp) * (double)val / (double)dis;
     }
     {
         // double e[5] = {-1, -1, 1, -1, 1};
@@ -140,8 +139,6 @@ void solve1_DoBoat(int tick)
         }
 
     }
-
-    
 }
 
 void solve1(int tick)

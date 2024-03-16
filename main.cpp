@@ -28,11 +28,12 @@ int main()
         System::Update_front();
 
         Command::clear();
-        solve1(System::tick);
+        solve2(System::tick);
         Command::print();
 
         System::Update_back();
 
+        System::RpyTick(System::tick);
         if (System::tick % 1000 == 0)
             clog << System::tick <<  " " << System::money << "\n";
     }

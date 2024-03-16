@@ -6,7 +6,7 @@
 #include "classCommand.hpp"
 #include "classSystem.hpp"
 
-int solve2_Single01Problem(
+double solve2_Single01Problem(
     int n,
     std::vector<int> &val,
     std::vector<int> &time,
@@ -49,10 +49,10 @@ int solve2_Single01Problem(
             p += lst[i][p];
         }
     if (endtime == 0) return 0;
-    return res / endtime;
+    return (double)res / endtime;
 }
 
-int solve2_calcBerthValue(
+double solve2_calcBerthValue(
     int tick,
     Berth &berth,
     std::vector<Robot*> &robot,
@@ -65,7 +65,7 @@ int solve2_calcBerthValue(
     
     std::vector<int> val, time, firstt, ddl, sol;
 
-    int res = 0;
+    double res = 0;
     for (auto &robot_it : robot)
     {
         val.clear();
@@ -117,7 +117,7 @@ int solve2_calcBerthValue(
     return res;
 }
 
-int currentValue[c_berth_num];
+double currentValue[c_berth_num];
 void solve2_calcRobot(int tick)
 {
     for (auto &robot_it : System::robot)
@@ -179,10 +179,14 @@ void solve2_calcRobot(int tick)
         solve2_calcBerthValue(tick, System::berth[i], ptrRobot[i], ptrGoods[i], tmpSol);
         for (size_t j = 0; j < tmpSol.size(); ++ j)
             if (ptrRobot[i][j]->goods)
+            {
                 ptrRobot[i][j]->setTarget(*ptrRobot[i][j]->ptrBerth);
+                ptrRobot[i][j]->ptrgoods = nullptr;
+            }
             else
             {
                 ptrRobot[i][j]->setTarget(*tmpSol[j]);
+                ptrRobot[i][j]->ptrgoods = tmpSol[j];
             }
     }
 }
@@ -191,27 +195,26 @@ void solve2_calcBoat(int tick)
 {
     for (int i = 0; i < c_boat_num ; ++ i)
     {
-        if (System::boat[i].pos != -1)
-        {
-            if (System::berth[System::boat[i].pos].trans_time + 10 >= c_time_totaltick - tick)
-                System::boat[i].go(-1);
-        }
-
+        int left_time = (3000 - System::berth[i * 2].trans_time - System::berth[i * 2 + 1].trans_time - c_time_berth2b) / 2;
+        int choice = System::berth[i * 2].trans_time > System::berth[i * 2 + 1].trans_time? 0 : 1;
         if (System::boat[i].status != Boat::done) continue;
         if (System::boat[i].pos == -1)
         {
-            System::boat[i].go(i * 2);
+            System::boat[i].go(i * 2 + choice);
             continue; 
         }
-        if (System::boat[i].goods == Boat::boat_capacity)
+        int tmp = tick % 3000;
+        if (tmp == System::berth[i * 2 + choice].trans_time + left_time)
+        {
+            System::boat[i].go(i * 2 +  1 - choice);
+            continue; 
+        }
+        if (tmp == 3000 - System::berth[i * 2 + 1 - choice].trans_time)
         {
             System::boat[i].go(-1);
-            continue;
+            continue; 
         }
-        if (System::berth[System::boat[i].pos].goods.empty())
-        {
-            System::boat[i].go(System::boat[i].pos == i * 2 ? i * 2 + 1 : i * 2);
-        }
+
     }
 }
 
@@ -227,8 +230,8 @@ void solve2(int tick)
                 it.ptrBerth = &System::berth[it.id];
     }
 
-    if (tick == 500)
-        tick = 500;
+    if (tick == 1878)
+        tick = 1878;
 
     solve2_calcRobot(tick);
     solve2_calcBoat(tick);

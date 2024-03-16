@@ -2,6 +2,11 @@
 
 #include <iostream>
 
+#include <ctime>
+#include <iomanip>
+#include <sstream>
+#include <string>
+
 std::vector<Robot> System::robot;
 std::vector<Boat> System::boat;
 std::vector<Berth> System::berth;
@@ -10,9 +15,24 @@ std::list<Goods> System::goods;
 int System::tick = 0;
 int System::money = 0;
 
-std::ofstream System::log_file;
+std::ofstream System::log_file, System::rpy_file;
 
 int System::nearest[N][N];
+
+static std::string GetCurrentTimeAsString()
+{
+    // 获取当前时间
+    std::time_t now = std::time(nullptr);
+    std::tm* timeinfo = std::localtime(&now);
+
+    // 格式化时间为字符串
+    std::stringstream ss;
+    ss << std::setfill('0') << std::setw(2) << timeinfo->tm_hour << "_"
+       << std::setfill('0') << std::setw(2) << timeinfo->tm_min << "_"
+       << std::setfill('0') << std::setw(2) << timeinfo->tm_sec;
+
+    return ss.str();
+}
 
 void System::Init()
 {
@@ -20,6 +40,10 @@ void System::Init()
     {
         log_file.open("_log.txt");
         std::cerr.rdbuf(log_file.rdbuf());
+    }
+    if (__OUTPUT_RPY__)
+    {
+        rpy_file.open("rpy-player\\rpy\\" + GetCurrentTimeAsString() + ".rpy");
     }
 
     // load map info
@@ -38,7 +62,7 @@ void System::Init()
         // for (int y = 0; y < c_size; ++ y)
         // {
         //     int d = System::berth.back().dis[x][y];
-        //     cerr << ((d == INT_MAX) ? -1 : d) << ((y == c_size - 1) ? "\n" : "\t");
+        //     cerr << ((d == INT_MAX) ? -1 : d) << ((y == c_size - 1) ? "\n" : "");
         // }
     }
 
@@ -53,13 +77,8 @@ void System::Init()
         if (System::berth[System::nearest[x][y]].dis[x][y] == INT_MAX)
             System::nearest[x][y] = -1;
     }
-    
-    // for (int x = 0; x < c_size; ++ x)
-    // for (int y = 0; y < c_size; ++ y)
-    // {
-    //     int d = System::nearest[x][y];
-    //     std::cerr << ((d == -1) ? "-" : std::to_string(d)) << ((y == c_size - 1) ? "\n" : " ");
-    // }
+
+    RpyMap();
 
     // load boat info
     System::boat.resize(c_boat_num);
@@ -200,6 +219,48 @@ void System::log(std::string type, std::string log)
     std::cerr << "[" << s_tick << "/" << type << "] " << log << "\n";
 }
 
+void System::RpyMap()
+{
+    if (!System::__OUTPUT_RPY__) return;
+
+    for (int x = 0; x < c_size; ++ x)
+    for (int y = 0; y < c_size; ++ y)
+    {
+        int d = System::nearest[x][y];
+        rpy_file << (char)((d == -1 or DisMap::ch[x][y] == 'B') ? DisMap::ch[x][y] : (d + '0')) 
+                 << ((y == c_size - 1) ? "\n" : "");
+    }
+}
+
+void System::RpyTick(int tick)
+{
+    if (!System::__OUTPUT_RPY__) return;
+
+    rpy_file << tick << " " << std::to_string(System::boat_trans_val) << '\n';
+
+    // item goods
+    rpy_file << System::goods.size() << '\n';
+    for (auto it : System::goods)
+    {
+        rpy_file << it.x << " " << it.y << " " << it.val << '\n';
+    }
+
+    //item robot
+    for (auto it : System::robot)
+    {
+        rpy_file << it.x << " " << it.y << " " << it.goods << '\n';
+
+        if (it.ptrgoods != nullptr)
+            rpy_file << it.ptrgoods->x << " " << it.ptrgoods->y << '\n';
+        else
+            rpy_file << it.x << " " << it.y << '\n';
+
+        if (it.ptrBerth != nullptr)
+            rpy_file << it.ptrBerth->x << " " << it.ptrBerth->y << '\n';
+        else
+            rpy_file << it.x << " " << it.y << '\n';
+    }
+}
 
 int System::getGoods(int x, int y)
 {
