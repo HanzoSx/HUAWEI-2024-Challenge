@@ -19,15 +19,16 @@ std::ofstream System::log_file, System::rpy_file;
 
 int System::nearest[N][N];
 
-static std::string GetCurrentTimeAsString()
-{
+static std::string GetCurrentTimeAsString() {
     // 获取当前时间
     std::time_t now = std::time(nullptr);
     std::tm* timeinfo = std::localtime(&now);
 
     // 格式化时间为字符串
     std::stringstream ss;
-    ss << std::setfill('0') << std::setw(2) << timeinfo->tm_hour << "_"
+    ss << std::setfill('0') << std::setw(2) << (timeinfo->tm_mon + 1) << "_"
+       << std::setfill('0') << std::setw(2) << timeinfo->tm_mday << "_"
+       << std::setfill('0') << std::setw(2) << timeinfo->tm_hour << "_"
        << std::setfill('0') << std::setw(2) << timeinfo->tm_min << "_"
        << std::setfill('0') << std::setw(2) << timeinfo->tm_sec;
 

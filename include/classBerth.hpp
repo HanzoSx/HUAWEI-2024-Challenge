@@ -20,6 +20,8 @@ public:
 
     // solve1
     int factor;
+    bool closed;
+
 };
 
 #endif

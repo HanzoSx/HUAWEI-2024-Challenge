@@ -32,11 +32,13 @@ public:
     static void Update_front();
     static void Update_back();
 
-    static const bool __DEBUG__ = false;
+    static const bool __SUBMIT__ = false;
 
-    static const bool __OUTPUT_RPY__ = true;
+    static const bool __DEBUG__ = true && !__SUBMIT__;
 
-    static const bool __OUTPUT_LOG__ = true;
+    static const bool __OUTPUT_RPY__ = true && !__SUBMIT__;
+
+    static const bool __OUTPUT_LOG__ = true && !__SUBMIT__;
     static const bool __OUTPUT_ERR__ = true;
     static const bool __OUTPUT_INFO__ = false;
     static void log(std::string type, std::string log);

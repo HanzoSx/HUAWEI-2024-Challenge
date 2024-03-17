@@ -23,20 +23,26 @@ double solve2_Single01Problem(
 
     for (size_t i = 0; i < n; ++ i)
     {
-        for (int t = ddl[i]; t > time[i]; -- t)
+        for (int t = std::min(ddl[i], 5800); t >= time[i]; -- t)
         {
-            if (/*dp[t - time[i]] and */dp[t] < dp[t - time[i]] + val[i])
+            if (t > time[i])
             {
-                dp[t] = dp[t - time[i]] + val[i];
-                lst[i][t] = - time[i];
-                if (dp[p] < dp[t]) p = t;
+                if (dp[t - time[i]] and dp[t] < dp[t - time[i]] + val[i])
+                {
+                    dp[t] = dp[t - time[i]] + val[i];
+                    lst[i][t] = - time[i];
+                    if (dp[p] < dp[t]) p = t;
+                }
             }
-        }
-        if (firstt[i] <= ddl[i] and dp[firstt[i]] < val[i])
-        {
-            dp[firstt[i]] = val[i];
-            lst[i][firstt[i]] = - firstt[i];
-            if (dp[p] < dp[firstt[i]]) p = firstt[i];
+            else
+            {
+                if (firstt[i] <= ddl[i] and dp[firstt[i]] < val[i])
+                {
+                    dp[firstt[i]] = val[i];
+                    lst[i][firstt[i]] = - firstt[i];
+                    if (dp[p] < dp[firstt[i]]) p = firstt[i];
+                }
+            }
         }
     }
     
@@ -49,7 +55,7 @@ double solve2_Single01Problem(
             p += lst[i][p];
         }
     if (endtime == 0) return 0;
-    return (double)res / endtime;
+    return (double)res / 1;endtime;
 }
 
 double solve2_calcBerthValue(
@@ -63,60 +69,73 @@ double solve2_calcBerthValue(
     int c_reserve_time = 5;
     solution.clear();
     
-    std::vector<int> val, time, firstt, ddl, sol;
+    std::vector<int> val, time, firstt, ddl, sol, index;
 
+    int index_r = -1;
     double res = 0;
     for (auto &robot_it : robot)
     {
+        ++ index_r;
         val.clear();
         time.clear();
         firstt.clear();
         ddl.clear();
 
+        index.clear();
+
+        int index_g = -1;
         for (auto &goods_it : goods)
         {
+            ++ index_g;
+            if (index_g % robot.size() != index_r) continue;
+            if (goods_it->val < 100) continue;
             int dis_G2B = berth.dis[goods_it->x][goods_it->y];
             int dis_B2R = robot_it->ptrBerth->dis[robot_it->x][robot_it->y];
             int dis_G2R = goods_it->dis[robot_it->x][robot_it->y];
+
+            index.push_back(index_g);
 
             val.push_back(goods_it->val);
             time.push_back(dis_G2B * 2);
             if (!robot_it->goods)
             {
                 firstt.push_back(dis_G2B + dis_G2R);
-                ddl.push_back(goods_it->life(tick) + dis_G2B);
+                ddl.push_back(goods_it->life(tick) + dis_G2B - c_reserve_time);
             }
             else
             {
                 firstt.push_back(dis_G2B * 2);
-                ddl.push_back(goods_it->life(tick) + dis_G2B - dis_B2R);
+                ddl.push_back(goods_it->life(tick) + dis_G2B - dis_B2R - c_reserve_time);
             }
         }
-        res += solve2_Single01Problem(goods.size(), val, time, firstt, ddl, sol);
-        solution.push_back(sol.size() ? goods[sol.back()] : nullptr);
+        res += solve2_Single01Problem(val.size(), val, time, firstt, ddl, sol);
+        solution.push_back(sol.size() ? goods[index[sol.back()]] : nullptr);
 
-        std::sort(sol.begin(), sol.end());
+        // std::sort(sol.begin(), sol.end());
 
-        if (sol.size())
-        {
-            int index = 0;
-            auto p = sol.begin();
-            for (auto goods_it = goods.begin(); goods_it != goods.end();)
-            {
-                if (*p == index)
-                {
-                    goods.erase(goods_it);
-                    p ++;
-                    if (p == sol.end()) break;
-                }
-                else goods_it ++;
-                index ++;
-            }
-        }
+        // if (sol.size() and false)
+        // {
+        //     int index = 0;
+        //     auto p = sol.begin();
+        //     for (auto goods_it = goods.begin(); goods_it != goods.end();)
+        //     {
+        //         if (*p == index)
+        //         {
+        //             goods.erase(goods_it);
+        //             p ++;
+        //             if (p == sol.end()) break;
+        //         }
+        //         else goods_it ++;
+        //         index ++;
+        //     }
+        // }
     }
     return res;
 }
 
+Robot *trans_robot;
+Berth *trans_berth;
+double max_delta;
 double currentValue[c_berth_num];
 void solve2_calcRobot(int tick)
 {
@@ -159,18 +178,30 @@ void solve2_calcRobot(int tick)
             tmpRobot_to = ptrRobot[berth.id];
             tmpRobot_to.push_back(&robot);
 
-            int tmpVal_from = solve2_calcBerthValue(tick, berth, tmpRobot_from, ptrGoods[robot.ptrBerth->id], tmpSol);
-            int tmpVal_to = solve2_calcBerthValue(tick, berth, tmpRobot_to, ptrGoods[berth.id], tmpSol);
+            double tmpVal_from = solve2_calcBerthValue(tick, berth, tmpRobot_from, ptrGoods[robot.ptrBerth->id], tmpSol);
+            double tmpVal_to = solve2_calcBerthValue(tick, berth, tmpRobot_to, ptrGoods[berth.id], tmpSol);
 
-            if (currentValue[robot.ptrBerth->id] + currentValue[berth.id] < tmpVal_from + tmpVal_to)
+            double delta = tmpVal_from + tmpVal_to - (currentValue[robot.ptrBerth->id] + currentValue[berth.id]);
+            if (robot.ptrBerth->closed) delta = tmpVal_to - currentValue[berth.id] + 1;
+            if (delta > max_delta)
             {
-                currentValue[robot.ptrBerth->id] = tmpVal_from;
-                currentValue[berth.id] = tmpVal_to;
-                ptrRobot[robot.ptrBerth->id] = tmpRobot_from;
-                ptrRobot[berth.id] = tmpRobot_to;
+                // currentValue[robot.ptrBerth->id] = tmpVal_from;
+                // currentValue[berth.id] = tmpVal_to;
+                // ptrRobot[robot.ptrBerth->id] = tmpRobot_from;
+                // ptrRobot[berth.id] = tmpRobot_to;
 
-                robot.ptrBerth = &berth;
+                // robot.ptrBerth = &berth;
+                max_delta = delta;
+                trans_robot = &robot;
+                trans_berth = &berth;
             }
+        }
+        if (max_delta > 0)
+        {
+            trans_robot->ptrBerth = trans_berth;
+            trans_robot = nullptr;
+            trans_berth = nullptr;
+            max_delta = 0;
         }
     }
 
@@ -204,14 +235,15 @@ void solve2_calcBoat(int tick)
             continue; 
         }
         int tmp = tick % 3000;
-        if (tmp == System::berth[i * 2 + choice].trans_time + left_time)
-        {
-            System::boat[i].go(i * 2 +  1 - choice);
-            continue; 
-        }
         if (tmp == 3000 - System::berth[i * 2 + 1 - choice].trans_time)
         {
             System::boat[i].go(-1);
+            continue; 
+        }
+        if (tmp == System::berth[i * 2 + choice].trans_time + left_time)
+        {
+            System::boat[i].go(i * 2 + 1 - choice);
+            if (tick >= 3000 * 4) System::berth[i * 2 + choice].closed = true;
             continue; 
         }
 
@@ -230,8 +262,8 @@ void solve2(int tick)
                 // it.ptrBerth = &System::berth[it.id];
     }
 
-    if (tick == 1878)
-        tick = 1878;
+    if (tick == 12448)
+        tick = 12448;
 
     solve2_calcRobot(tick);
     solve2_calcBoat(tick);

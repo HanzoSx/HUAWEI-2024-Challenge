@@ -78,6 +78,7 @@ void Robot::setTarget(DisMap &map)
 
 void Robot::step(vector<Robot> &robot)
 {
+    if (ptrBerth->closed) return;
     if (map == nullptr or map->dis[x][y] == 0) return;
 
     int tmpDir = -1, tmpDis = INT_MAX, perturbation = x + y;
