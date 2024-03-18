@@ -231,6 +231,10 @@ void System::RpyMap()
         rpy_file << (char)((d == -1 or DisMap::ch[x][y] == 'B') ? DisMap::ch[x][y] : (d + '0')) 
                  << ((y == c_size - 1) ? "\n" : "");
     }
+
+    // berth pos
+    for (auto it : System::berth)
+        rpy_file << it.x << " " << it.y << "\n";
 }
 
 void System::RpyTick(int tick)
@@ -243,7 +247,7 @@ void System::RpyTick(int tick)
     rpy_file << System::goods.size() << '\n';
     for (auto it : System::goods)
     {
-        rpy_file << it.x << " " << it.y << " " << it.val << '\n';
+        rpy_file << it.x << " " << it.y << " " << it.val << " " << it.life(tick) << '\n';
     }
 
     //item robot
@@ -261,6 +265,10 @@ void System::RpyTick(int tick)
         else
             rpy_file << it.x << " " << it.y << '\n';
     }
+    
+    //item berth
+    for (auto it : System::berth)
+        rpy_file << it.goods.size() << (it.id == 9 ? '\n' : ' ');
 }
 
 int System::getGoods(int x, int y)

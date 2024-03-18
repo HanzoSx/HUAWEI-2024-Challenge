@@ -34,7 +34,7 @@ public:
 
     static const bool __SUBMIT__ = false;
 
-    static const bool __DEBUG__ = true && !__SUBMIT__;
+    static const bool __DEBUG__ = false && !__SUBMIT__;
 
     static const bool __OUTPUT_RPY__ = true && !__SUBMIT__;
 
