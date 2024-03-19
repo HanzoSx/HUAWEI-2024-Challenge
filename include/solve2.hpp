@@ -232,28 +232,30 @@ void solve2_calcRobot(int tick)
     }
 }
 
+int berth_rank[10];
 void solve2_calcBoat(int tick)
 {
     for (int i = 0; i < c_boat_num ; ++ i)
     {
-        int left_time = (3000 - System::berth[i * 2].trans_time - System::berth[i * 2 + 1].trans_time - c_time_berth2b) / 2;
-        int choice = System::berth[i * 2].trans_time > System::berth[i * 2 + 1].trans_time? 0 : 1;
+        int berth1 = i, berth2 = 9 - i;
+        int left_time = (3000 - System::berth[berth_rank[berth1]].trans_time - System::berth[berth_rank[berth2]].trans_time - c_time_berth2b) / 2;
+        int choice = System::berth[berth_rank[berth1]].trans_time > System::berth[berth_rank[berth2]].trans_time ? 0 : berth2 - berth1;
         if (System::boat[i].status != Boat::done) continue;
         if (System::boat[i].pos == -1)
         {
-            System::boat[i].go(i * 2 + choice);
+            System::boat[i].go(berth_rank[berth1 + choice]);
             continue; 
         }
         int tmp = tick % 3000;
-        if (tmp == 3000 - System::berth[i * 2 + 1 - choice].trans_time)
+        if (tmp == 3000 - System::berth[berth_rank[berth2 - choice]].trans_time)
         {
             System::boat[i].go(-1);
             continue;
         }
-        if (tmp == System::berth[i * 2 + choice].trans_time + left_time)
+        if (tmp == System::berth[berth_rank[berth1 + choice]].trans_time + left_time)
         {
-            System::boat[i].go(i * 2 + 1 - choice);
-            if (tick >= 3000 * 4) System::berth[i * 2 + choice].closed = true;
+            System::boat[i].go(berth_rank[berth2 - choice]);
+            if (tick >= 3000 * 4) System::berth[berth_rank[berth1 + choice]].closed = true;
             continue; 
         }
 
@@ -269,6 +271,10 @@ void solve2(int tick)
             if (System::nearest[it.x][it.y] >= 0)
                 it.ptrBerth = &System::berth[System::nearest[it.x][it.y]];
                 // it.ptrBerth = &System::berth[it.id];
+
+        for (int i = 0; i < 10; ++ i)
+            berth_rank[i] = i;
+        sort(berth_rank, berth_rank + 10, [](int arg1, int arg2){ return System::berth[arg1].trans_time < System::berth[arg2].trans_time; });
     }
 
 

@@ -1,17 +1,17 @@
-[    1/ERR ] Robot 0[0, 0, 0] Out of sync || Current : [26, 26, 0]
-[    1/ERR ] Robot 1[0, 0, 0] Out of sync || Current : [29, 63, 0]
-[    1/ERR ] Robot 2[0, 0, 0] Out of sync || Current : [85, 149, 0]
-[    1/ERR ] Robot 3[0, 0, 0] Out of sync || Current : [90, 32, 0]
-[    1/ERR ] Robot 4[0, 0, 0] Out of sync || Current : [116, 80, 0]
-[    1/ERR ] Robot 5[0, 0, 0] Out of sync || Current : [118, 29, 0]
-[    1/ERR ] Robot 6[0, 0, 0] Out of sync || Current : [130, 143, 0]
-[    1/ERR ] Robot 7[0, 0, 0] Out of sync || Current : [136, 72, 0]
-[    1/ERR ] Robot 8[0, 0, 0] Out of sync || Current : [167, 122, 0]
-[    1/ERR ] Robot 9[0, 0, 0] Out of sync || Current : [167, 173, 0]
+[    1/ERR ] Robot 0[0, 0, 0] Out of sync || Current : [24, 78, 0]
+[    1/ERR ] Robot 1[0, 0, 0] Out of sync || Current : [24, 118, 0]
+[    1/ERR ] Robot 2[0, 0, 0] Out of sync || Current : [47, 100, 0]
+[    1/ERR ] Robot 3[0, 0, 0] Out of sync || Current : [67, 78, 0]
+[    1/ERR ] Robot 4[0, 0, 0] Out of sync || Current : [67, 118, 0]
+[    1/ERR ] Robot 5[0, 0, 0] Out of sync || Current : [131, 78, 0]
+[    1/ERR ] Robot 6[0, 0, 0] Out of sync || Current : [131, 118, 0]
+[    1/ERR ] Robot 7[0, 0, 0] Out of sync || Current : [154, 100, 0]
+[    1/ERR ] Robot 8[0, 0, 0] Out of sync || Current : [174, 78, 0]
+[    1/ERR ] Robot 9[0, 0, 0] Out of sync || Current : [174, 118, 0]
 [15000/IMP ] Skip Tick = 0
-[15000/IMP ] Goods Sum  = 2565
-[15000/IMP ] Robot Pull = 1423
-[15000/IMP ] Boat Trans = 1337
-[15000/IMP ] Goods Val        = 444099
-[15000/IMP ] Robot Pull Value = 270632
-[15000/IMP ] Boat Trans Value = 254428
+[15000/IMP ] Goods Sum  = 2491
+[15000/IMP ] Robot Pull = 1486
+[15000/IMP ] Boat Trans = 1378
+[15000/IMP ] Goods Val        = 434152
+[15000/IMP ] Robot Pull Value = 283504
+[15000/IMP ] Boat Trans Value = 262969
