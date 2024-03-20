@@ -1,7 +1,8 @@
 #include <bits/stdc++.h>
 
-std::vector<int> data = {161, 24, 184, 137, 115, 182};
-// std::vector<int> data = {58, 28, 92, 13, 109, 84};
+// std::vector<int> data = {161, 24, 184, 137, 115, 182};
+std::vector<int> data = {161, 143, 136, 50, 154, 181};
+
 
 std::default_random_engine global_random_engine(1);
 int random(int a, int b, std::default_random_engine &seed)

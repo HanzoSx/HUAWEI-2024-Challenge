@@ -279,7 +279,7 @@ void solve2_calcBoat(int tick)
         {
             System::boat[i].go(berth_rank[berth2 - choice]);
             if (tick >= 3000 * 4) System::berth[berth_rank[berth1 + choice]].closed = true;
-            continue; 
+            continue;   
         }
 
     }
@@ -299,7 +299,7 @@ void solve2(int tick)
 
 
     solve2_calcRobot(tick);
-    solve2_calcBoat(tick);
+    // solve2_calcBoat(tick);
 
     for (auto &it : System::robot)
         it.step(System::robot);
