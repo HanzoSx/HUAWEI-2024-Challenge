@@ -166,15 +166,12 @@ void System::Update_front()
         ++ it;
         if (_it->life(System::tick) <= 0)
         {
-            if (_it->tag_select)
-            {
-                for (auto &robot : System::robot)
-                    if (&(*_it) == robot.ptrgoods)
-                    {
-                        robot.map = nullptr;
-                        robot.ptrgoods = nullptr;
-                    }
-            }
+            for (auto &robot : System::robot)
+                if (&(*_it) == robot.ptrgoods)
+                {
+                    robot.map = nullptr;
+                    robot.ptrgoods = nullptr;
+                }
             System::goods.erase(_it);
         }
     }
