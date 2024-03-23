@@ -34,11 +34,11 @@ public:
     static void Update_front();
     static void Update_back();
 
-    static const bool __SUBMIT__ = true;
+    static const bool __SUBMIT__ = false;
 
     static const bool __DEBUG__ = false && !__SUBMIT__;
 
-    static const bool __OUTPUT_RPY__ = true && !__SUBMIT__;
+    static const bool __OUTPUT_RPY__ = false && !__SUBMIT__;
 
     static const bool __OUTPUT_LOG__ = true && !__SUBMIT__;
     static const bool __OUTPUT_ERR__ = true;
