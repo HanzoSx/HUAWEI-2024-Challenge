@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
 
-// std::vector<int> data = {161, 24, 184, 137, 115, 182};
-std::vector<int> data = {161, 143, 136, 50, 154, 181};
+std::vector<int> data = {94, 165, 145, 63, 20, 124};
+// std::vector<int> data = {173, 177, 183, 107, 124, 94};
 
 
 std::default_random_engine global_random_engine(1);
@@ -40,11 +40,11 @@ bool check(int seed)
 int main()
 {
 
-    // std::uniform_int_distribution<int> d(800, 1200);
-    // std::default_random_engine s(3);
-    // for (int i = 0; i < 21; ++ i)
-    //     std::cout << d(s) << " ";
-    // std::cout << "\n";
+    std::uniform_int_distribution<int> d(50, 100);
+    std::default_random_engine s(5);
+    for (int i = 0; i < 21; ++ i)
+        std::cout << d(s) << " ";
+    std::cout << "\n";
 
     for (size_t i = 1; i < INT_MAX; ++ i)
     {

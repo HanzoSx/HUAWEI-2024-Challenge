@@ -5,6 +5,7 @@
 
 #include "solve1.hpp"
 #include "solve2.hpp"
+#include "solve3.hpp"
 
 int tmp_mpney3000;
 
@@ -33,7 +34,10 @@ int main()
         Command::print();
 
         System::Update_back();
-        System::RpyTick(System::tick);
+
+        if (System::mapchanged) System::calcNearest();
+        System::RpyTick(System::tick, System::mapchanged);
+        System::mapchanged = false;
 
         if (System::tick % 1000 == 0)
             clog << System::tick <<  " " << System::money << "\n";

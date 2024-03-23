@@ -121,6 +121,7 @@ double solve2_calcBerthValue(
             index.push_back(it.index);
         }
 
+        res += robot_it->goods;
         res += solve2_Single01Problem(val.size(), val, time, firstt, ddl, sol);
         solution.push_back(sol.size() ? goods[index[sol.back()]] : nullptr);
 
@@ -172,8 +173,8 @@ void solve2_calcRobot(int tick)
                 ptrGoods[i].push_back(&it);
     }
 
-    if (tick == 6849)
-        tick = 6849;
+    if (tick == 13387)
+        tick = 13387;
 
     for (int i = 0; i < c_berth_num; ++ i)
         currentValue[i] = solve2_calcBerthValue(tick, System::berth[i], ptrRobot[i], ptrGoods[i], tmpSol);
@@ -183,7 +184,7 @@ void solve2_calcRobot(int tick)
         double max_delta = 0;
         // Robot &robot = System::robot[tick % 10];
         std::vector<Robot*> Robot_from, Robot_to;
-        if (!robot.ptrBerth->closed and (robot.ptrgoods != nullptr or robot.goods)) continue;
+        if ((robot.ptrBerth != nullptr and !robot.ptrBerth->closed) and (robot.ptrgoods != nullptr or robot.goods)) continue;
         for (auto &berth : System::berth)
         {
             if (berth.closed) continue;
@@ -199,18 +200,12 @@ void solve2_calcRobot(int tick)
             double tmpVal_from = solve2_calcBerthValue(tick, berth, tmpRobot_from, ptrGoods[robot.ptrBerth->id], tmpSol);
             double tmpVal_to = solve2_calcBerthValue(tick, berth, tmpRobot_to, ptrGoods[berth.id], tmpSol);
 
-            double delta = tmpVal_from + tmpVal_to - (currentValue[robot.ptrBerth->id] + currentValue[berth.id]);
             if (robot.ptrBerth->closed) tmpVal_from = currentValue[robot.ptrBerth->id] = 0;
+            double delta = tmpVal_from + tmpVal_to - (currentValue[robot.ptrBerth->id] + currentValue[berth.id]);
             if (tmpVal_to > 0 and currentValue[robot.ptrBerth->id] == 0 and delta == 0) delta = tmpVal_to;
             
-            if (delta > max_delta)
+            if (delta > max_delta and (System::nearby[robot.ptrBerth->id][berth.id] or robot.ptrBerth->closed or System::tick < 200))
             {
-                // currentValue[robot.ptrBerth->id] = tmpVal_from;
-                // currentValue[berth.id] = tmpVal_to;
-                // ptrRobot[robot.ptrBerth->id] = tmpRobot_from;
-                // ptrRobot[berth.id] = tmpRobot_to;
-
-                // robot.ptrBerth = &berth;
                 max_delta = delta;
                 trans_berth = &berth;
 
@@ -272,13 +267,13 @@ void solve2_calcBoat(int tick)
         if (tmp == 3000 - System::berth[berth_rank[berth2 - choice]].trans_time)
         {
             System::boat[i].go(-1);
-            if (tick >= 3000 * 4) System::berth[berth_rank[berth2 - choice]].closed = true;
+            if (tick >= 3000 * 4) System::berth[berth_rank[berth2 - choice]].closed = System::mapchanged = true;
             continue;
         }
         if (tmp == System::berth[berth_rank[berth1 + choice]].trans_time + left_time)
         {
             System::boat[i].go(berth_rank[berth2 - choice]);
-            if (tick >= 3000 * 4) System::berth[berth_rank[berth1 + choice]].closed = true;
+            if (tick >= 3000 * 4) System::berth[berth_rank[berth1 + choice]].closed = System::mapchanged = true;
             continue;   
         }
 
@@ -299,7 +294,7 @@ void solve2(int tick)
 
 
     solve2_calcRobot(tick);
-    // solve2_calcBoat(tick);
+    solve2_calcBoat(tick);
 
     for (auto &it : System::robot)
         it.step(System::robot);

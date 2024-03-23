@@ -25,6 +25,8 @@ public:
     static std::ofstream log_file, rpy_file;
 
     static int nearest[N][N];
+    static bool nearby[c_berth_num][c_berth_num];
+    static void calcNearest();
 
     static void Init();
     static size_t Input();
@@ -32,7 +34,7 @@ public:
     static void Update_front();
     static void Update_back();
 
-    static const bool __SUBMIT__ = false;
+    static const bool __SUBMIT__ = true;
 
     static const bool __DEBUG__ = false && !__SUBMIT__;
 
@@ -43,8 +45,9 @@ public:
     static const bool __OUTPUT_INFO__ = false;
     static void log(std::string type, std::string log);
 
-    static void RpyMap();
-    static void RpyTick(int tick);
+    static bool mapchanged;
+    static void RpyMap(bool first = false);
+    static void RpyTick(int tick, bool mapChange = false);
 
     static int getGoods(int x, int y);
     static bool pullGoods(int x, int y, int val);

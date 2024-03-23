@@ -6,6 +6,7 @@
 #include <iomanip>
 #include <sstream>
 #include <string>
+#include <string.h>
 
 std::vector<Robot> System::robot;
 std::vector<Boat> System::boat;
@@ -18,6 +19,7 @@ int System::money = 0;
 std::ofstream System::log_file, System::rpy_file;
 
 int System::nearest[N][N];
+bool System::nearby[c_berth_num][c_berth_num];
 
 static std::string GetCurrentTimeAsString() {
     // 获取当前时间
@@ -33,6 +35,38 @@ static std::string GetCurrentTimeAsString() {
        << std::setfill('0') << std::setw(2) << timeinfo->tm_sec;
 
     return ss.str();
+}
+
+void System::calcNearest()
+{
+    for (int x = 0; x < c_size; ++ x)
+    for (int y = 0; y < c_size; ++ y)
+    {
+        System::nearest[x][y] = 0;
+        for (int i = 0; i < c_berth_num; ++ i)
+            if (!System::berth[i].closed and System::berth[i].dis[x][y] < System::berth[System::nearest[x][y]].dis[x][y])
+                System::nearest[x][y] = i;
+
+        if (System::berth[System::nearest[x][y]].dis[x][y] == INT_MAX or 
+            System::berth[System::nearest[x][y]].closed)
+            System::nearest[x][y] = -1;
+    }
+    memset(nearby, false, sizeof nearby);
+    for (size_t x = 0; x < c_size - 1; ++ x)
+    for (size_t y = 0; y < c_size - 1; ++ y)
+    {
+        if (nearest[x][y] == -1) continue;
+        if (nearest[x+1][y] != -1)
+        {
+            nearby[nearest[x][y]][nearest[x+1][y]] = true;
+            nearby[nearest[x+1][y]][nearest[x][y]] = true;
+        }
+        if (nearest[x][y+1] != -1)
+        {
+            nearby[nearest[x][y]][nearest[x][y+1]] = true;
+            nearby[nearest[x][y+1]][nearest[x][y]] = true;
+        }
+    }
 }
 
 void System::Init()
@@ -67,19 +101,9 @@ void System::Init()
         // }
     }
 
-    for (int x = 0; x < c_size; ++ x)
-    for (int y = 0; y < c_size; ++ y)
-    {
-        System::nearest[x][y] = 0;
-        for (int i = 0; i < c_berth_num; ++ i)
-            if (System::berth[i].dis[x][y] < System::berth[System::nearest[x][y]].dis[x][y])
-                System::nearest[x][y] = i;
+    System::calcNearest();
 
-        if (System::berth[System::nearest[x][y]].dis[x][y] == INT_MAX)
-            System::nearest[x][y] = -1;
-    }
-
-    RpyMap();
+    RpyMap(true);
 
     // load boat info
     System::boat.resize(c_boat_num);
@@ -217,7 +241,8 @@ void System::log(std::string type, std::string log)
     std::cerr << "[" << s_tick << "/" << type << "] " << log << "\n";
 }
 
-void System::RpyMap()
+bool System::mapchanged;
+void System::RpyMap(bool first)
 {
     if (!System::__OUTPUT_RPY__) return;
 
@@ -230,15 +255,20 @@ void System::RpyMap()
     }
 
     // berth pos
-    for (auto it : System::berth)
-        rpy_file << it.x << " " << it.y << "\n";
+    if (first)
+        for (auto it : System::berth)
+            rpy_file << it.x << " " << it.y << "\n";
 }
 
-void System::RpyTick(int tick)
+void System::RpyTick(int tick, bool mapChange)
 {
     if (!System::__OUTPUT_RPY__) return;
 
-    rpy_file << tick << " " << std::to_string(System::boat_trans_val) << '\n';
+    rpy_file << tick << " " << std::to_string(System::boat_trans_val) <<
+        " " << (mapChange ? 1 : 0) << '\n';
+
+    if (mapChange)
+        System::RpyMap();
 
     // item goods
     rpy_file << System::goods.size() << '\n';
