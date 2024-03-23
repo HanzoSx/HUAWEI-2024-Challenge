@@ -34,7 +34,7 @@ public:
     static void Update_front();
     static void Update_back();
 
-    static const bool __SUBMIT__ = false;
+    static const bool __SUBMIT__ = true;
 
     static const bool __DEBUG__ = false && !__SUBMIT__;
 

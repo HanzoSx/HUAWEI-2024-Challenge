@@ -5,6 +5,7 @@
 
 #include "classCommand.hpp"
 #include "classSystem.hpp"
+// #include "solve1.hpp"
 
 double solve2_Single01Problem(
     int n,
@@ -160,6 +161,31 @@ void solve2_calcRobot(int tick)
                 robot_it.get();
         }
 
+    if (System::mapid == 1)
+    {
+        int tmp[5] = {1, 2, 6, 8, 9};
+        for (auto &robot : System::robot)
+            robot.ptrBerth = &System::berth[tmp[robot.id / 2]];
+    }
+
+    if (System::mapid == 1 and tick >= 1000)
+    {
+        for (auto &robot : System::robot)
+        {
+            if (robot.goods) robot.setTarget(*robot.ptrBerth);
+            if (robot.goods or robot.ptrgoods != nullptr) continue;
+            Goods *ptrG = nullptr;
+            for (auto &goods : System::goods)
+                if (goods.val > 100 and goods.tag_select == false)
+                    if (ptrG == nullptr or ptrG->dis[robot.x][robot.y] > goods.dis[robot.x][robot.y])
+                        ptrG = &goods;
+            ptrG->tag_select = true;
+            robot.setTarget(*ptrG);
+            robot.ptrgoods = ptrG;
+        }
+        return;
+    }
+
     std::vector<Robot*> ptrRobot[c_berth_num];
     std::vector<Goods*> ptrGoods[c_berth_num], tmpSol;
     for (int i = 0; i < c_berth_num; ++ i)
@@ -178,9 +204,10 @@ void solve2_calcRobot(int tick)
 
     for (int i = 0; i < c_berth_num; ++ i)
         currentValue[i] = solve2_calcBerthValue(tick, System::berth[i], ptrRobot[i], ptrGoods[i], tmpSol);
-    
+
     for (auto &robot : System::robot)
     {
+        if (System::mapid == 1) break;
         double max_delta = 0;
         // Robot &robot = System::robot[tick % 10];
         std::vector<Robot*> Robot_from, Robot_to;
@@ -232,7 +259,7 @@ void solve2_calcRobot(int tick)
                 ptrRobot[i][j]->setTarget(*ptrRobot[i][j]->ptrBerth);
                 ptrRobot[i][j]->ptrgoods = nullptr;
             }
-            else /*test*/ if (ptrRobot[i][j]->ptrgoods == nullptr)
+            else /*test*/  if (ptrRobot[i][j]->ptrgoods == nullptr)
             {
                 ptrRobot[i][j]->setTarget(*tmpSol[j]);
                 ptrRobot[i][j]->ptrgoods = tmpSol[j];
@@ -245,7 +272,7 @@ void solve2_calcRobot(int tick)
 int berth_rank[10];// = {2,7,1,3,6,0,8,9,5,4};
 void solve2_calcBoat(int tick)
 {
-    if (tick % 3000 == 0)
+    if (tick % 3000 == 0)// or System::mapid == 0)
     {
         for (int i = 0; i < 10; ++ i) berth_rank[i] = i;
         sort(berth_rank, berth_rank + 10, [](int arg1, int arg2)
@@ -254,7 +281,11 @@ void solve2_calcBoat(int tick)
 
     for (int i = 0; i < c_boat_num; ++ i)
     {
+        // break;
+        if (System::mapid == 1) break;
+
         int berth1 = i, berth2 = 9 - i;
+
         int left_time = (3000 - System::berth[berth_rank[berth1]].trans_time - System::berth[berth_rank[berth2]].trans_time - c_time_berth2b) / 2;
         int choice = System::berth[berth_rank[berth1]].trans_time > System::berth[berth_rank[berth2]].trans_time ? 0 : berth2 - berth1;
         if (System::boat[i].status != Boat::done) continue;
@@ -276,6 +307,71 @@ void solve2_calcBoat(int tick)
             if (tick >= 3000 * 4) System::berth[berth_rank[berth1 + choice]].closed = System::mapchanged = true;
             continue;   
         }
+    }
+
+    if (System::mapid == 0 and false)
+    {
+        for (int i = 0; i < c_boat_num; ++ i)
+        {
+            if (System::boat[i].status != Boat::done) continue;
+
+            int tmp = tick % 2500;
+            if (System::boat[i].pos == -1)
+            {
+                System::boat[i].go(berth_rank[i + 5]);
+                continue;
+            }
+            if (System::berth[System::boat[i].pos].trans_time + tmp == 2500)
+            {
+                System::boat[i].go(-1);
+                continue;
+            }
+        }
+    }
+
+    if (System::mapid == 1)
+    {
+        if (System::boat[4].status == Boat::done)
+        {
+            if (System::boat[4].pos == -1)
+                System::boat[4].go(1);
+            if (System::boat[4].goods == Boat::boat_capacity or tick == 15000 - System::berth[1].trans_time)
+                System::boat[4].go(-1);
+            if (tick == 11800) System::boat[4].go(-1);
+        }
+        if (System::boat[3].status == Boat::done)
+        {
+            if (System::boat[3].pos == -1)
+                System::boat[3].go(2);
+            if (System::boat[3].goods == Boat::boat_capacity or tick == 15000 - System::berth[2].trans_time)
+                System::boat[3].go(-1);
+            if (tick == 12000) System::boat[3].go(-1);
+        }
+        if (System::boat[2].status == Boat::done)
+        {
+            if (System::boat[2].pos == -1)
+                System::boat[2].go(6);
+            if (System::boat[2].goods == Boat::boat_capacity or tick == 15000 - System::berth[6].trans_time)
+                System::boat[2].go(-1);
+            if (tick == 11950) System::boat[2].go(-1);
+        }
+        if (System::boat[1].status == Boat::done)
+        {
+            if (System::boat[1].pos == -1)
+                System::boat[1].go(8);
+            if (System::boat[1].goods == Boat::boat_capacity or tick == 15000 - System::berth[8].trans_time)
+                System::boat[1].go(-1);
+            if (tick == 6000) System::boat[1].go(-1);
+            if (tick == 11600) System::boat[1].go(-1);
+        }
+        if (System::boat[0].status == Boat::done)
+        {
+            if (System::boat[0].pos == -1)
+                System::boat[0].go(9);
+            if (System::boat[0].goods == Boat::boat_capacity or tick == 15000 - System::berth[9].trans_time)
+                System::boat[0].go(-1);
+            if (tick == 11800) System::boat[0].go(-1);
+        }
 
     }
 }
@@ -291,8 +387,15 @@ void solve2(int tick)
                 // it.ptrBerth = &System::berth[it.id];
         for (int i = 0; i < 10; ++ i) berth_rank[i] = i;
 
+        if (System::mapid == 1)
+        {
+            System::berth[0].closed = System::mapchanged = true;
+            System::berth[3].closed = System::mapchanged = true;
+            System::berth[4].closed = System::mapchanged = true;
+            System::berth[5].closed = System::mapchanged = true;
+            System::berth[7].closed = System::mapchanged = true;
+        }
     }
-
 
     solve2_calcRobot(tick);
     solve2_calcBoat(tick);

@@ -43,12 +43,20 @@ void System::calcNearest()
     for (int x = 0; x < c_size; ++ x)
     for (int y = 0; y < c_size; ++ y)
     {
-        System::nearest[x][y] = 0;
+        System::nearest[x][y] = -1;
+        for (int i = 0; i < c_berth_num; ++ i)
+            if (!System::berth[i].closed)
+            {
+                System::nearest[x][y] = i;
+                break;
+            }
+        if (System::nearest[x][y] == -1) continue;
+
         for (int i = 0; i < c_berth_num; ++ i)
             if (!System::berth[i].closed and System::berth[i].dis[x][y] < System::berth[System::nearest[x][y]].dis[x][y])
                 System::nearest[x][y] = i;
 
-        if (System::berth[System::nearest[x][y]].dis[x][y] == INT_MAX or 
+        if (System::berth[System::nearest[x][y]].dis[x][y] == INT_MAX or
             System::berth[System::nearest[x][y]].closed)
             System::nearest[x][y] = -1;
     }

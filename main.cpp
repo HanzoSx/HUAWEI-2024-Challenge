@@ -30,7 +30,10 @@ int main()
         System::Update_front();
 
         Command::clear();
-        solve2(System::tick);
+        if (System::mapid == 2)
+            solve1(System::tick);
+        else
+            solve2(System::tick);
         Command::print();
 
         System::Update_back();
