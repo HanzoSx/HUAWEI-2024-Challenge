@@ -15,6 +15,7 @@ std::list<Goods> System::goods;
 
 int System::tick = 0;
 int System::money = 0;
+int System::mapid = 0;
 
 std::ofstream System::log_file, System::rpy_file;
 
@@ -115,6 +116,11 @@ void System::Init()
     System::robot.resize(c_robot_num);
     for (size_t i = 0; i < c_robot_num; ++ i)
         System::robot[i].id = i;
+
+    if (System::berth[0].x == 73 and System::berth[0].y == 73)
+        System::mapid = 1;
+    if (System::berth[0].x == 2 and System::berth[0].y == 174)
+        System::mapid = 2;
 
     // finish sign
     char okk[100]; std::cin >> okk;

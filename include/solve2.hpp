@@ -252,7 +252,7 @@ void solve2_calcBoat(int tick)
             { return System::berth[arg1].goods.size() < System::berth[arg2].goods.size(); });
     }
 
-    for (int i = 0; i < c_boat_num ; ++ i)
+    for (int i = 0; i < c_boat_num; ++ i)
     {
         int berth1 = i, berth2 = 9 - i;
         int left_time = (3000 - System::berth[berth_rank[berth1]].trans_time - System::berth[berth_rank[berth2]].trans_time - c_time_berth2b) / 2;
@@ -261,7 +261,7 @@ void solve2_calcBoat(int tick)
         if (System::boat[i].pos == -1)
         {
             System::boat[i].go(berth_rank[berth1 + choice]);
-            continue; 
+            continue;
         }
         int tmp = tick % 3000;
         if (tmp == 3000 - System::berth[berth_rank[berth2 - choice]].trans_time)
@@ -290,6 +290,7 @@ void solve2(int tick)
                 it.ptrBerth = &System::berth[System::nearest[it.x][it.y]];
                 // it.ptrBerth = &System::berth[it.id];
         for (int i = 0; i < 10; ++ i) berth_rank[i] = i;
+
     }
 
 

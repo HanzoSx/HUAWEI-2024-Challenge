@@ -20,7 +20,7 @@ public:
     static std::vector<Berth> berth;
     static std::list<Goods> goods;
 
-    static int tick, money;
+    static int tick, money, mapid;
     
     static std::ofstream log_file, rpy_file;
 
@@ -34,7 +34,7 @@ public:
     static void Update_front();
     static void Update_back();
 
-    static const bool __SUBMIT__ = true;
+    static const bool __SUBMIT__ = false;
 
     static const bool __DEBUG__ = false && !__SUBMIT__;
 
