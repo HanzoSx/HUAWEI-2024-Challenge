@@ -64,40 +64,56 @@ void ProcessMap()
 
 void Init()
 {
-    for(int i = 0; i < N; i ++){
-        scanf("%s", grid[i]);
+    for (size_t i = 0; i < N; ++ i)
+    {
+        for (size_t j = 0; j < N; ++ j)
+            grid[i][j] = cin.get();
+        cin.get();
+        // scanf("%s", grid[i]);
     }
-    ProcessMap();
-    scanf("%d", &berth_num);
-    for(int i = 0; i < berth_num; i ++)
+    // ProcessMap();
+
+    // scanf("%d", &berth_num);
+    cin >> berth_num;
+    for(int i = 0; i < berth_num; ++ i)
     {
         int id;
-        scanf("%d", &id);
-        scanf("%d%d%d", &berth[id].x, &berth[id].y, &berth[id].loading_speed);
+        // scanf("%d", &id);
+        // scanf("%d%d%d", &berth[id].x, &berth[id].y, &berth[id].loading_speed);
+        cin >> id;
+        cin >> berth[id].x >> berth[id].y >> berth[id].loading_speed;
     }
-    scanf("%d", &boat_capacity);
-    char okk[100];
-    scanf("%s", okk);
-    printf("OK\n");
+    // scanf("%d", &boat_capacity);
+    cin >> boat_capacity;
+    // char okk[100];
+    // scanf("%s", okk);
+    string str;
+    getline(cin, str);
+    // printf("OK\n");
+    cout << "OK\n";
     fflush(stdout);
 }
 
 
 int Input()
 {
-    scanf("%d", &money);
+    // scanf("%d", &money);
+    cin >> money;
 
-    scanf("%d", &goods_num);
+    // scanf("%d", &goods_num);
+    cin >> goods_num;
     for(int i = 0; i < goods_num; i ++)
     {
         int x, y, val;
-        scanf("%d%d%d", &x, &y, &val);
-        if(val == 0) val = 0;
+        // scanf("%d%d%d", &x, &y, &val);
+        cin >> x >> y >> val;
     }
 
-    scanf("%d", &robot_num);
+    // scanf("%d", &robot_num);
+    cin >> robot_num;
     for(int i = 0; i < robot_num; i ++)
-        scanf("%d%d%d%d", &robot[i].id, &robot[i].goods_num, &robot[i].x, &robot[i].y);
+        // scanf("%d%d%d%d", &robot[i].id, &robot[i].goods_num, &robot[i].x, &robot[i].y);
+        cin >> robot[i].id >> robot[i].goods_num >> robot[i].x >> robot[i].y;
 
     scanf("%d", &boat_num);
     for(int i = 0; i < boat_num; i ++)
@@ -114,13 +130,13 @@ int main()
     while(scanf("%d", &frame_id) != EOF)
     {
         Input();
-        if(money >= robot_price && robot_num <= 1){
-            printf("lbot %d %d\n", robot_purchase_point[0].first, robot_purchase_point[0].second);
-        }
+        // if(money >= robot_price && robot_num <= 1){
+        //     printf("lbot %d %d\n", robot_purchase_point[0].first, robot_purchase_point[0].second);
+        // }
 
-        if(money >= boat_price && boat_num <= 1){
-            printf("lboat %d %d\n", boat_purchase_point[0].first, boat_purchase_point[0].second);
-        }
+        // if(money >= boat_price && boat_num <= 1){
+        //     printf("lboat %d %d\n", boat_purchase_point[0].first, boat_purchase_point[0].second);
+        // }
 
         for(int i = 0; i < robot_num; i ++)
             printf("move %d %d\n", i, rand() % 4);
