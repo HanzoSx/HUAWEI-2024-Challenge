@@ -7,6 +7,6 @@ load_speed (load_speed),
 factor     (0),
 closed     (false)
 {
-    setZeroRect(x, y, 4, 4);
+    setZeroRect(x, y, 1, 1);
     creat();
 }

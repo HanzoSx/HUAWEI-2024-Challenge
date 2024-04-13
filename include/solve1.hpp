@@ -114,76 +114,81 @@ void solve1_CalcRobotTarget()
     }
 }
 
-void solve1_DoBoat(int tick)
-{
-    for (int i = 0; i < c_boat_num ; ++ i)
-    {
-        int left_time = (3000 - System::berth[i * 2].trans_time - System::berth[i * 2 + 1].trans_time - c_time_berth2b) / 2;
-        int choice = System::berth[i * 2].trans_time > System::berth[i * 2 + 1].trans_time? 0 : 1;
-        if (System::boat[i].status != Boat::done) continue;
-        if (System::boat[i].pos == -1)
-        {
-            System::boat[i].go(i * 2 + choice);
-            continue; 
-        }
-        int tmp = tick % 3000;
-        if (tmp == System::berth[i * 2 + choice].trans_time + left_time)
-        {
-            System::boat[i].go(i * 2 +  1 - choice);
-            continue; 
-        }
-        if (tmp == 3000 - System::berth[i * 2 + 1 - choice].trans_time)
-        {
-            System::boat[i].go(-1);
-            continue; 
-        }
+// void solve1_DoBoat(int tick)
+// {
+//     for (int i = 0; i < System::boat.size() ; ++ i)
+//     {
+//         int left_time = (3000 - System::berth[i * 2].trans_time - System::berth[i * 2 + 1].trans_time - c_time_berth2b) / 2;
+//         int choice = System::berth[i * 2].trans_time > System::berth[i * 2 + 1].trans_time? 0 : 1;
+//         if (System::boat[i].status != Boat::done) continue;
+//         if (System::boat[i].pos == -1)
+//         {
+//             System::boat[i].go(i * 2 + choice);
+//             continue; 
+//         }
+//         int tmp = tick % 3000;
+//         if (tmp == System::berth[i * 2 + choice].trans_time + left_time)
+//         {
+//             System::boat[i].go(i * 2 +  1 - choice);
+//             continue; 
+//         }
+//         if (tmp == 3000 - System::berth[i * 2 + 1 - choice].trans_time)
+//         {
+//             System::boat[i].go(-1);
+//             continue; 
+//         }
 
-    }
-}
+//     }
+// }
 
 
 int berth_rank2[10];// = {2,7,1,3,6,0,8,9,5,4};
 
-void solve1_calcBoat(int tick)
-{
-    if (tick % 3000 == 0)// or System::mapid == 0)
-    {
-        for (int i = 0; i < 10; ++ i) berth_rank2[i] = i;
-        sort(berth_rank2, berth_rank2 + 10, [](int arg1, int arg2)
-            { return System::berth[arg1].goods.size() < System::berth[arg2].goods.size(); });
-    }
+// void solve1_calcBoat(int tick)
+// {
+//     if (tick % 3000 == 0)// or System::mapid == 0)
+//     {
+//         for (int i = 0; i < 10; ++ i) berth_rank2[i] = i;
+//         sort(berth_rank2, berth_rank2 + 10, [](int arg1, int arg2)
+//             { return System::berth[arg1].goods.size() < System::berth[arg2].goods.size(); });
+//     }
 
-    for (int i = 0; i < c_boat_num; ++ i)
-    {
-        // break;
+//     for (int i = 0; i < System::boat.size(); ++ i)
+//     {
+//         // break;
 
-        int berth1 = i, berth2 = 9 - i;
+//         int berth1 = i, berth2 = 9 - i;
 
-        int left_time = (3000 - System::berth[berth_rank2[berth1]].trans_time - System::berth[berth_rank2[berth2]].trans_time - c_time_berth2b) / 2;
-        int choice = System::berth[berth_rank2[berth1]].trans_time > System::berth[berth_rank2[berth2]].trans_time ? 0 : berth2 - berth1;
-        if (System::boat[i].status != Boat::done) continue;
-        if (System::boat[i].pos == -1)
-        {
-            System::boat[i].go(berth_rank2[berth1 + choice]);
-            continue;
-        }
-        int tmp = tick % 3000;
-        if (tmp == 3000 - System::berth[berth_rank2[berth2 - choice]].trans_time)
-        {
-            System::boat[i].go(-1);
-            if (tick >= 3000 * 4) System::berth[berth_rank2[berth2 - choice]].closed = System::mapchanged = true;
-            continue;
-        }
-        if (tmp == System::berth[berth_rank2[berth1 + choice]].trans_time + left_time)
-        {
-            System::boat[i].go(berth_rank2[berth2 - choice]);
-            if (tick >= 3000 * 4) System::berth[berth_rank2[berth1 + choice]].closed = System::mapchanged = true;
-            continue;   
-        }
-    }
-}
+//         int left_time = (3000 - System::berth[berth_rank2[berth1]].trans_time - System::berth[berth_rank2[berth2]].trans_time - c_time_berth2b) / 2;
+//         int choice = System::berth[berth_rank2[berth1]].trans_time > System::berth[berth_rank2[berth2]].trans_time ? 0 : berth2 - berth1;
+//         if (System::boat[i].status != Boat::done) continue;
+//         if (System::boat[i].pos == -1)
+//         {
+//             System::boat[i].go(berth_rank2[berth1 + choice]);
+//             continue;
+//         }
+//         int tmp = tick % 3000;
+//         if (tmp == 3000 - System::berth[berth_rank2[berth2 - choice]].trans_time)
+//         {
+//             System::boat[i].go(-1);
+//             if (tick >= 3000 * 4) System::berth[berth_rank2[berth2 - choice]].closed = System::mapchanged = true;
+//             continue;
+//         }
+//         if (tmp == System::berth[berth_rank2[berth1 + choice]].trans_time + left_time)
+//         {
+//             System::boat[i].go(berth_rank2[berth2 - choice]);
+//             if (tick >= 3000 * 4) System::berth[berth_rank2[berth1 + choice]].closed = System::mapchanged = true;
+//             continue;   
+//         }
+//     }
+// }
 void solve1(int tick)
 {
+
+    if (tick == 1)
+    {
+        System::buyRobot(0);
+    }
 
     for (auto &it : System::robot)
         it.step(System::robot);
@@ -192,6 +197,6 @@ void solve1(int tick)
     solve1_CalcGoodsFactor(tick);
     solve1_CalcRobotTarget();
     // solve1_DoBoat(tick);
-    solve1_calcBoat(tick);
+    // solve1_calcBoat(tick);
 
 }

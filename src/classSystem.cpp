@@ -1,4 +1,5 @@
 #include "classSystem.hpp"
+#include "classCommand.hpp"
 
 #include <iostream>
 
@@ -12,6 +13,10 @@ std::vector<Robot> System::robot;
 std::vector<Boat> System::boat;
 std::vector<Berth> System::berth;
 std::list<Goods> System::goods;
+
+std::vector<std::pair<int, int>> System::BuyRobotPos;
+std::vector<std::pair<int, int>> System::BuyBoatPos;
+std::vector<std::pair<int, int>> System::deliveryPos;
 
 int System::tick = 0;
 int System::money = 0;
@@ -60,7 +65,7 @@ void System::calcNearest()
             System::berth[System::nearest[x][y]].closed)
             System::nearest[x][y] = -1;
     }
-    
+
     System::nearby = std::vector<std::vector<bool>>(System::berth.size(), std::vector<bool>(System::berth.size(), false));
     for (size_t x = 0; x < c_size - 1; ++ x)
     for (size_t y = 0; y < c_size - 1; ++ y)
@@ -79,6 +84,17 @@ void System::calcNearest()
     }
 }
 
+void System::buyRobot(size_t id)
+{
+    Command::lbot(BuyRobotPos[id].first, BuyRobotPos[id].second);
+}
+
+void System::buyBoat(size_t id)
+{
+    Command::lboat(BuyBoatPos[id].first, BuyBoatPos[id].second);
+}
+
+
 void System::Init()
 {
     if (__OUTPUT_LOG__)
@@ -92,8 +108,35 @@ void System::Init()
     }
 
     // load map info
+    // for (size_t i = 0; i < c_size; ++ i)
+    //     std::cin >> DisMap::ch[i];
+
     for (size_t i = 0; i < c_size; ++ i)
-        std::cin >> DisMap::ch[i];
+    {
+        for (size_t j = 0; j < c_size; ++ j)
+            DisMap::ch[i][j] = std::cin.get();
+        std::cin.get();
+    }
+    
+    for (size_t i = 0; i < c_size; ++ i)
+    for (size_t j = 0; j < c_size; ++ j)
+    {
+        switch (DisMap::ch[i][j])
+        {
+            case 'R':
+                BuyRobotPos.emplace_back(i, j);
+                break;
+            case 'S':
+                BuyBoatPos.emplace_back(i, j);
+                break;
+            case 'T':
+                deliveryPos.emplace_back(i, j);
+                break;
+            
+            default:
+                break;
+        }
+    }
 
     // load berth info
     int berth_num;
@@ -128,15 +171,15 @@ void System::Init()
 
 size_t System::Input()
 {
-    int _money;
-    std::cin >> _money;
+    int _money, _tick;
+    std::cin >> _tick >> _money;
 
-    // if (_tick != System::tick + 1)
-    // {
-    //     System::log("ERR", "Tick " + std::to_string(System::tick) + " -> " + std::to_string(_tick));
-    //     System::skip_ticks += _tick - System::tick - 1;
-    // }
-    // System::tick = _tick;
+    if (_tick != System::tick + 1)
+    {
+        System::log("ERR", "Tick " + std::to_string(System::tick) + " -> " + std::to_string(_tick));
+        System::skip_ticks += _tick - System::tick - 1;
+    }
+    System::tick = _tick;
 
     if (_money != System::money)
         System::log("INFO", "Money changed " + std::to_string(_money - System::money) + 
@@ -155,14 +198,18 @@ size_t System::Input()
     }
 
     // load robot info
-    for (size_t i = 0; i < System::robot.size(); ++ i)
+    std::cin >> num;
+    while (System::robot.size() < num)
+        System::robot.emplace_back();
+    
+    for (size_t i = 0; i < num; ++ i)
     {
-        int goods, x, y, status;
-        std::cin >> goods >> x >> y >> status;
+        int goods_num, x, y, status;
+        std::cin >> goods_num >> x >> y >> status;
 
-        if (robot[i].x != x or robot[i].y != y or (bool)robot[i].goods != (bool)goods)
-            System::log("ERR", robot[i].info() + "Out of sync || Current : [" + 
-                    std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(goods) + "]");
+        // if (robot[i].x != x or robot[i].y != y or (bool)robot[i].goods != (bool)goods)
+        //     System::log("ERR", robot[i].info() + "Out of sync || Current : [" + 
+        //             std::to_string(x) + ", " + std::to_string(y) + ", " + std::to_string(goods) + "]");
 
         System::robot[i].x = x;
         System::robot[i].y = y;
@@ -170,14 +217,17 @@ size_t System::Input()
     }
 
     // load boat info
-    for (size_t i = 0; i < System::boat.size(); ++ i)
+    std::cin >> num;
+    while (System::boat.size() < num)
+        System::boat.emplace_back();
+
+    for (size_t i = 0; i < num; ++ i)
     {
-        int status, pos;
-        std::cin >> status >> pos;
+        int id, goods_num, x, y, dir, status;
+        std::cin >> id >> goods_num >> x >> y >> dir >> status;
         // if (boat[i].status != status or boat[i].pos != pos)
         //     cerr << id << " " << boat[i].status << " " << boat[i].pos << "\n";
         System::boat[i].status = static_cast<Boat::Status>(status);
-        System::boat[i].pos = pos;
     }
 
     // finish message
@@ -188,21 +238,21 @@ size_t System::Input()
 void System::Update_front()
 {
     // goods disappear
-    for (auto it = System::goods.begin(); it != System::goods.end();)
-    {
-        auto _it = it;
-        ++ it;
-        if (_it->life(System::tick) <= 0)
-        {
-            for (auto &robot : System::robot)
-                if (&(*_it) == robot.ptrgoods)
-                {
-                    robot.map = nullptr;
-                    robot.ptrgoods = nullptr;
-                }
-            System::goods.erase(_it);
-        }
-    }
+    // for (auto it = System::goods.begin(); it != System::goods.end();)
+    // {
+    //     auto _it = it;
+    //     ++ it;
+    //     if (_it->life(System::tick) <= 0)
+    //     {
+    //         for (auto &robot : System::robot)
+    //             if (&(*_it) == robot.ptrgoods)
+    //             {
+    //                 robot.map = nullptr;
+    //                 robot.ptrgoods = nullptr;
+    //             }
+    //         System::goods.erase(_it);
+    //     }
+    // }
     // System::goods.remove_if([](Goods g){return g.life(System::tick) <= 0;});
 
     // ship update

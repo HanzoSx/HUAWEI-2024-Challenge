@@ -2,22 +2,27 @@
 
 #include "classCommand.hpp"
 
-Boat::Boat() : pos(-1), status(done), goods(0), goods_val(0) {}
+Boat::Boat() : pos(-1), status(moving), goods(0), goods_val(0) {}
 
 int Boat::boat_capacity = 0;
 
-
-void Boat::go(int target)
+void Boat::dept()
 {
-    if (target == -1)
-    {
-        Command::go(id);
-    }
-    else
-    {
-        Command::ship(id, target);
-    }
-    // status = Status::moving;
-    // pos = target;
-    return;
+    Command::dept(this->id);
 }
+
+void Boat::berth()
+{
+    Command::berth(this->id);
+}
+
+void Boat::rot(int directon)
+{
+    Command::rot(this->id, directon);
+}
+
+void Boat::ship()
+{
+    Command::ship(this->id);
+}
+
