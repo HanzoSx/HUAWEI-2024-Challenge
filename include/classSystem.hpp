@@ -19,13 +19,15 @@ public:
     static std::vector<Boat> boat;
     static std::vector<Berth> berth;
     static std::list<Goods> goods;
+    static std::vector<std::pair<int, int>> BuyRobotPos;
+    static std::vector<std::pair<int, int>> BuyBoatPos;
 
     static int tick, money, mapid;
     
     static std::ofstream log_file, rpy_file;
 
     static int nearest[N][N];
-    static bool nearby[c_berth_num][c_berth_num];
+    static std::vector<std::vector<bool>> nearby;
     static void calcNearest();
 
     static void Init();
@@ -33,6 +35,9 @@ public:
 
     static void Update_front();
     static void Update_back();
+
+    static void buyRobot(size_t id);
+    static void buyBoat(size_t id);
 
     static const bool __SUBMIT__ = true;
 

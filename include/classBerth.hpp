@@ -11,11 +11,12 @@ class Berth : public DisMap
 {
 public:
 
-    Berth(int x, int y, int trans_time, int load_speed);
+    Berth(int x, int y, int load_speed);
 
     // system
-    int x, y, id;
-    int trans_time, load_speed;
+    int id;
+    int x, y, width, height;
+    int load_speed;
     std::queue<int> goods;
 
     // solve1

@@ -20,7 +20,7 @@ int System::mapid = 0;
 std::ofstream System::log_file, System::rpy_file;
 
 int System::nearest[N][N];
-bool System::nearby[c_berth_num][c_berth_num];
+std::vector<std::vector<bool>> System::nearby;
 
 static std::string GetCurrentTimeAsString() {
     // 获取当前时间
@@ -44,7 +44,7 @@ void System::calcNearest()
     for (int y = 0; y < c_size; ++ y)
     {
         System::nearest[x][y] = -1;
-        for (int i = 0; i < c_berth_num; ++ i)
+        for (int i = 0; i < System::berth.size(); ++ i)
             if (!System::berth[i].closed)
             {
                 System::nearest[x][y] = i;
@@ -52,7 +52,7 @@ void System::calcNearest()
             }
         if (System::nearest[x][y] == -1) continue;
 
-        for (int i = 0; i < c_berth_num; ++ i)
+        for (int i = 0; i < System::berth.size(); ++ i)
             if (!System::berth[i].closed and System::berth[i].dis[x][y] < System::berth[System::nearest[x][y]].dis[x][y])
                 System::nearest[x][y] = i;
 
@@ -60,7 +60,8 @@ void System::calcNearest()
             System::berth[System::nearest[x][y]].closed)
             System::nearest[x][y] = -1;
     }
-    memset(nearby, false, sizeof nearby);
+    
+    System::nearby = std::vector<std::vector<bool>>(System::berth.size(), std::vector<bool>(System::berth.size(), false));
     for (size_t x = 0; x < c_size - 1; ++ x)
     for (size_t y = 0; y < c_size - 1; ++ y)
     {
@@ -95,12 +96,14 @@ void System::Init()
         std::cin >> DisMap::ch[i];
 
     // load berth info
-    for (size_t i = 0; i < c_berth_num; ++ i)
+    int berth_num;
+    std::cin >> berth_num;
+    for (size_t i = 0; i < berth_num; ++ i)
     {
         int id, x, y, trans_time, loading_speed;
-        std::cin >> id >> x >> y >> trans_time >> loading_speed;
-        System::berth.emplace_back(x, y, trans_time, loading_speed);
-        System::berth.back().id = i;
+        std::cin >> id >> x >> y >> loading_speed;
+        System::berth.emplace_back(x, y, loading_speed);
+        System::berth.back().id = id;
 
         // for (int x = 0; x < c_size; ++ x)
         // for (int y = 0; y < c_size; ++ y)
@@ -115,20 +118,7 @@ void System::Init()
     RpyMap(true);
 
     // load boat info
-    System::boat.resize(c_boat_num);
-    for (size_t i = 0; i < c_boat_num; ++ i)
-        System::boat[i].id = i;
     std::cin >> Boat::boat_capacity;
-
-    // init robot info
-    System::robot.resize(c_robot_num);
-    for (size_t i = 0; i < c_robot_num; ++ i)
-        System::robot[i].id = i;
-
-    if (System::berth[0].x == 73 and System::berth[0].y == 73)
-        System::mapid = 1;
-    if (System::berth[0].x == 2 and System::berth[0].y == 174)
-        System::mapid = 2;
 
     // finish sign
     char okk[100]; std::cin >> okk;
@@ -138,15 +128,15 @@ void System::Init()
 
 size_t System::Input()
 {
-    int _tick, _money;
-    std::cin >> _tick >> _money;
+    int _money;
+    std::cin >> _money;
 
-    if (_tick != System::tick + 1)
-    {
-        System::log("ERR", "Tick " + std::to_string(System::tick) + " -> " + std::to_string(_tick));
-        System::skip_ticks += _tick - System::tick - 1;
-    }
-    System::tick = _tick;
+    // if (_tick != System::tick + 1)
+    // {
+    //     System::log("ERR", "Tick " + std::to_string(System::tick) + " -> " + std::to_string(_tick));
+    //     System::skip_ticks += _tick - System::tick - 1;
+    // }
+    // System::tick = _tick;
 
     if (_money != System::money)
         System::log("INFO", "Money changed " + std::to_string(_money - System::money) + 
@@ -165,7 +155,7 @@ size_t System::Input()
     }
 
     // load robot info
-    for (size_t i = 0; i < c_robot_num; ++ i)
+    for (size_t i = 0; i < System::robot.size(); ++ i)
     {
         int goods, x, y, status;
         std::cin >> goods >> x >> y >> status;
@@ -180,7 +170,7 @@ size_t System::Input()
     }
 
     // load boat info
-    for (size_t i = 0; i < c_boat_num; ++ i)
+    for (size_t i = 0; i < System::boat.size(); ++ i)
     {
         int status, pos;
         std::cin >> status >> pos;
@@ -217,7 +207,7 @@ void System::Update_front()
 
     // ship update
     for (auto &it : System::boat)
-        if (it.status == Boat::Status::done and it.pos == -1)
+        if (it.status == Boat::Status::loading and it.pos == -1)
         {
             System::boat_trans_goods += it.goods;
             System::boat_trans_val += it.goods_val;
@@ -229,7 +219,7 @@ void System::Update_back()
 {
     // ship update
     for (auto &it : System::boat)
-        if (it.status == Boat::Status::done and it.pos != -1)
+        if (it.status == Boat::Status::loading and it.pos != -1)
             for (size_t i = 1; i <= System::berth[it.pos].load_speed; ++ i)
             {
                 if (System::berth[it.pos].goods.empty() or it.goods >= Boat::boat_capacity)

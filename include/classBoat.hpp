@@ -9,16 +9,19 @@ public:
 
     static int boat_capacity;
 
-    void go(int target);
+    void dept();
+    void berth();
+    void rot(int directon);
+    void ship();
 
-    int id, pos;
     enum Status
     {
         moving = 0,
-        done,
-        wait
+        recover,
+        loading
     }   status;
 
+    int id, pos;
     int goods, goods_val;
 
 };
